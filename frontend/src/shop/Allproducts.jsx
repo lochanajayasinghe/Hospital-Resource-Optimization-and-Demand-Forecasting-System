@@ -1,29 +1,10 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import AllProductCard from "../components/AllProductCard";
-import Banner from "../components/ProBanner";
+import React from 'react';
 
-const Allproducts = ({handleClick}) => {
-
-    const [product,setProduct]=useState([]);
-  
-    useEffect(()=>{
-        axios.get("http://localhost:8070/product/").then((res)=>{
-          setProduct(res.data)
-        }).catch((err)=>{
-          alert(err.message)
-        })
-      
-    },[])
+export default function Allproducts() {
   return (
-   <div>
-    <Banner/> 
-
-    <AllProductCard product={product}  headline="Let's Shop"  handleClick={handleClick} key={product._id} /> 
-    
-   </div>
-
+    <div style={{padding:20}}>
+      <h3>All products (stub)</h3>
+      <p>This is a placeholder for the Allproducts component.</p>
+    </div>
   )
 }
-
-export default Allproducts
