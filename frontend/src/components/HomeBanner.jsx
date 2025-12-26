@@ -6,12 +6,11 @@ const HomeBanner = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="home-hero px-4 lg:px-24 flex items-center justify-center mt-12"
+    <div className="home-hero px-4 lg:px-24 flex items-center justify-center"
          style={{
            backgroundImage: `url('https://cdn.pixabay.com/photo/2024/07/01/17/11/woman-8865733_1280.png')`,
            backgroundSize: 'cover',
-           backgroundPosition: 'center',
-           minHeight: '90vh'
+           minHeight: '50vh'
          }}
     >
       <div className="flex w-full flex-col md:flex-row justify-between items-center gap-12 py-4 mt-0 mb-0 ">
