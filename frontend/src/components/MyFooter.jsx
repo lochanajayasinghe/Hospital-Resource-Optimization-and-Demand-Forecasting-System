@@ -1,59 +1,61 @@
-import React from 'react';
-import { BsFacebook, BsGithub, BsInstagram, BsTwitter } from 'react-icons/bs';
+import React from 'react'
+import { BsFacebook, BsGithub, BsInstagram, BsTwitter } from 'react-icons/bs'
 
 const MyFooter = () => {
+  const root = { background: '#0f172a', color: '#fff', padding: '36px 12px', marginTop: 48 }
+  const grid = { maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24 }
+  const colTitle = { fontWeight: 700, marginBottom: 8 }
+  const small = { fontSize: 14, color: '#cbd5e1', lineHeight: 1.8 }
+  const bottom = { borderTop: '1px solid rgba(148,163,184,0.08)', marginTop: 28, paddingTop: 18 }
+  const socialStyle = { display: 'flex', gap: 12, alignItems: 'center' }
+
   return (
-    <footer className="bg-gray-800 text-white">
-      <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+    <footer style={root}>
+      <div style={grid}>
         <div>
-          <h4 className="font-bold mb-2">Company</h4>
-          <ul className="text-sm space-y-1">
-            <li>About</li>
-            <li>Careers</li>
-            <li>Brand Center</li>
-            <li>Blog</li>
-          </ul>
+          <div style={colTitle}>Product</div>
+          <div style={small}>
+            <div>Features</div>
+            <div>Integrations</div>
+            <div>Pricing</div>
+          </div>
         </div>
+
         <div>
-          <h4 className="font-bold mb-2">Help</h4>
-          <ul className="text-sm space-y-1">
-            <li>Discord Server</li>
-            <li>Twitter</li>
-            <li>Facebook</li>
-            <li>Contact Us</li>
-          </ul>
+          <div style={colTitle}>Resources</div>
+          <div style={small}>
+            <div>Docs</div>
+            <div>API</div>
+            <div>Support</div>
+          </div>
         </div>
+
         <div>
-          <h4 className="font-bold mb-2">Legal</h4>
-          <ul className="text-sm space-y-1">
-            <li>Privacy Policy</li>
-            <li>Licensing</li>
-            <li>Terms &amp; Conditions</li>
-          </ul>
+          <div style={colTitle}>Company</div>
+          <div style={small}>
+            <div>About</div>
+            <div>Careers</div>
+            <div>Contact</div>
+          </div>
         </div>
+
         <div>
-          <h4 className="font-bold mb-2">Download</h4>
-          <ul className="text-sm space-y-1">
-            <li>iOS</li>
-            <li>Android</li>
-            <li>Windows</li>
-            <li>MacOS</li>
-          </ul>
+          <div style={colTitle}>Stay Connected</div>
+          <div style={small}>Subscribe for product updates and forecasting insights.</div>
         </div>
       </div>
-      <div className="border-t border-gray-700 mt-4 py-4">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-          <div className="text-sm">© {new Date().getFullYear()} Your Company</div>
-          <div className="flex space-x-4 text-xl">
-            <a href="#" aria-label="facebook"><BsFacebook /></a>
-            <a href="#" aria-label="instagram"><BsInstagram /></a>
-            <a href="#" aria-label="twitter"><BsTwitter /></a>
-            <a href="#" aria-label="github"><BsGithub /></a>
-          </div>
+
+      <div style={{ maxWidth: 1200, margin: '0 auto', ...bottom, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ color: '#94a3b8' }}>© {new Date().getFullYear()} Hospital Resource Optimization</div>
+        <div style={socialStyle}>
+          <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="facebook" style={{ color: '#cbd5e1' }}><BsFacebook /></a>
+          <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="instagram" style={{ color: '#cbd5e1' }}><BsInstagram /></a>
+          <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="twitter" style={{ color: '#cbd5e1' }}><BsTwitter /></a>
+          <a href="https://github.com" target="_blank" rel="noreferrer" aria-label="github" style={{ color: '#cbd5e1' }}><BsGithub /></a>
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default MyFooter;
+export default MyFooter
