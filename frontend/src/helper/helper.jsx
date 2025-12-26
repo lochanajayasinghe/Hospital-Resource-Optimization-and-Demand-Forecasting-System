@@ -1,6 +1,6 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { InvalidTokenError ,jwtDecode } from  'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 axios.defaults.baseURL = 'http://localhost:8070';
 
@@ -10,7 +10,7 @@ axios.defaults.baseURL = 'http://localhost:8070';
 /** To get username from Token */
 export async function getUsername(){
     const token = localStorage.getItem('token')
-    if(!token) return  InvalidTokenError
+    if(!token) return null
     let decode = jwtDecode(token)
     return decode;
 }
@@ -44,7 +44,8 @@ export async function registerUser(credentials){
 
         /** send email */
         if(status === 201){
-            await axios.post('/api/registerMail', { username, userEmail : email, text : msg})
+            const text = `Welcome ${username}, your account has been created.`;
+            await axios.post('/api/registerMail', { username, userEmail : email, text })
         }
 
         return toast.success("Register successfully..!");
@@ -120,9 +121,10 @@ export async function resetPassword({ username, password }){
 export async function getUsers(){
     try {
         const { data } = await axios.get(`/api/user/getUsers`);
-        return ( users => setUsers(users.data) )
+        return data;
     } catch (error) {
-        return (err => console.log(err))
+        console.error(error);
+        return null;
     }
 }
 
