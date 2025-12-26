@@ -1,122 +1,72 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import avatar from '../assets/profile.png';
-import toast, { Toaster } from 'react-hot-toast';
-import { useFormik } from 'formik';
-import { registerValidation } from '../helper/validate';
-import convertToBase64 from '../helper/convert';
-import { registerUser } from '../helper/helper';
-import Navbar from '../components/Navbar';
-import { ReactTyped } from 'react-typed';
-import styles from '../styles/Username.module.css';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import toast, { Toaster } from 'react-hot-toast'
+import { useFormik } from 'formik'
+import { registerValidation } from '../helper/validate'
+import convertToBase64 from '../helper/convert'
+import { registerUser } from '../helper/helper'
+import Navbar from './Navbar'
+import { ReactTyped } from 'react-typed'
+
+const avatar = 'https://via.placeholder.com/80'
+const containerStyle = { minHeight: '100vh', backgroundImage: "url('https://cdn.pixabay.com/photo/2017/01/09/11/30/dumbbell-1966247_1280.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }
+const glassStyle = { width: '30%', height: '75%', paddingTop: '2em', paddingBottom: '1em', background: 'rgba(255,255,255,0.06)', borderRadius: 12 }
+const textboxStyle = { width: '100%', padding: '8px', borderRadius: 8, border: '1px solid #e5e7eb' }
+const btnStyle = { backgroundColor: '#f97316', color: '#fff', padding: '8px 16px', borderRadius: 9999, cursor: 'pointer' }
 
 export default function Register() {
-  const navigate = useNavigate();
-  const [file, setFile] = useState();
+  const navigate = useNavigate()
+  const [file, setFile] = useState()
 
   const formik = useFormik({
-    initialValues: {
-      email: '',
-      username: '',
-      password: '',
-      role: 'user',
-    },
+    initialValues: { email: '', username: '', password: '', role: 'user' },
     validate: registerValidation,
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      values = await Object.assign(values, { profile: file || '' });
-      let registerPromise = registerUser(values);
-      registerPromise.then(() => navigate('/login'));
+      values = Object.assign(values, { profile: file || '' })
+      let registerPromise = registerUser(values)
+      registerPromise.then(() => navigate('/login'))
     },
-  });
+  })
 
-  /** Handler for file upload */
-  const onUpload = async (e) => {
-    const base64 = await convertToBase64(e.target.files[0]);
-    setFile(base64);
-  };
+  const onUpload = async (e) => { const base64 = await convertToBase64(e.target.files[0]); setFile(base64); }
 
   return (
-    <div
-      className={styles.container}
-      style={{ backgroundImage: `url('https://cdn.pixabay.com/photo/2017/01/09/11/30/dumbbell-1966247_1280.jpg')` }} // Background image
-    >
+    <div style={containerStyle}>
       <Navbar />
-
       <Toaster position="top-center" reverseOrder={false} />
 
-      <div className="flex justify-center items-center h-screen mt-10 mb-4"> {/* Added margin-top & reduced margin-bottom */}
-        <div
-          className={styles.glass}
-          style={{ width: '30%', height: '75%', paddingTop: '2em', paddingBottom: '1em' }} // Reduced bottom padding
-        >
-          <div className="title flex flex-col items-center">
-            <h4 className="text-4xl font-bold">Register</h4>
-            <span className="py-3 text-lg w-3/4 text-center text-gray-500">
-              Happy to join you!
-            </span>
-            <ReactTyped
-              className="text-2xl font-bold text-red-500"
-              strings={['WORKOUT', 'EXERCISE', 'GETFIT', 'EATHEALTHY']}
-              typeSpeed={120}
-              backSpeed={140}
-              loop
-            />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', marginTop: 40, marginBottom: 16 }}>
+        <div style={glassStyle}>
+          <div style={{ textAlign: 'center' }}>
+            <h4 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Register</h4>
+            <p style={{ color: '#6b7280' }}>Happy to join you!</p>
+            <ReactTyped className="text-2xl font-bold text-red-500" strings={[ 'WORKOUT','EXERCISE','GETFIT','EATHEALTHY' ]} typeSpeed={120} backSpeed={140} loop />
           </div>
 
-          <form className="py-1" onSubmit={formik.handleSubmit}>
-            <div className="profile flex justify-center py-3">
+          <form style={{ paddingTop: 8 }} onSubmit={formik.handleSubmit}>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0' }}>
               <label htmlFor="profile">
-                <img
-                  src={file || avatar}
-                  className={styles.profile_img}
-                  alt="avatar"
-                  style={{ width: '80px', height: '80px' }}
-                />
+                <img src={file || avatar} alt="avatar" style={{ width: '80px', height: '80px', borderRadius: 9999 }} />
               </label>
-              <input onChange={onUpload} type="file" id="profile" name="profile" />
+              <input onChange={onUpload} type="file" id="profile" name="profile" style={{ marginLeft: 12 }} />
             </div>
 
-            <div className="textbox flex flex-col items-center gap-4">
-              <input
-                {...formik.getFieldProps('email')}
-                className={styles.textbox}
-                type="text"
-                placeholder="Email*"
-                style={{ fontSize: '14px', padding: '8px' }}
-              />
-              <input
-                {...formik.getFieldProps('username')}
-                className={styles.textbox}
-                type="text"
-                placeholder="Username*"
-                style={{ fontSize: '14px', padding: '8px' }}
-              />
-              <input
-                {...formik.getFieldProps('password')}
-                className={styles.textbox}
-                type="password"
-                placeholder="Password*"
-                style={{ fontSize: '14px', padding: '8px' }}
-              />
-              <button
-                className={styles.btn}
-                type="submit"
-                style={{ padding: '8px 16px', fontSize: '14px' }}
-              >
-                Register
-              </button>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+              <input {...formik.getFieldProps('email')} style={textboxStyle} type="text" placeholder="Email*" />
+              <input {...formik.getFieldProps('username')} style={textboxStyle} type="text" placeholder="Username*" />
+              <input {...formik.getFieldProps('password')} style={textboxStyle} type="password" placeholder="Password*" />
+              <button style={btnStyle} type="submit">Register</button>
             </div>
 
-            <div className="text-center py-3">
-              <span className="text-gray-500 text-sm">
-                Already Registered? <Link className="text-red-500" to="/login">Login Now</Link>
-              </span>
+            <div style={{ textAlign: 'center', paddingTop: 12 }}>
+              <span style={{ color: '#6b7280', fontSize: 14 }}>Already Registered? <Link to="/login" style={{ color: '#ef4444' }}>Login Now</Link></span>
             </div>
           </form>
         </div>
       </div>
     </div>
-  );
+  )
 }
+ 
