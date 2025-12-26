@@ -1,79 +1,40 @@
-import React, { useEffect } from 'react'
-import toast, { Toaster } from 'react-hot-toast';
-import { useFormik } from 'formik';
-import { resetPasswordValidation } from '../helper/validate'
-import { resetPassword } from '../helper/helper'
-import { useAuthStore } from '../store/store';
-import { useNavigate, Navigate } from 'react-router-dom';
-import useFetch from '../hooks/fetch.hook'
+import React from 'react'
+import { useFormik } from 'formik'
+import toast, { Toaster } from 'react-hot-toast'
+import { Link, useNavigate } from 'react-router-dom'
 
-import styles from '../styles/Username.module.css';
-import backgroundImage from '../assets/background.jpg'; // Import your background image
-
+const containerStyle = { minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }
+const glassStyle = { padding: '2rem', width: '360px', background: 'rgba(255,255,255,0.04)', borderRadius: 12 }
+const textboxStyle = { width: '100%', padding: '8px', borderRadius: 8, border: '1px solid #e5e7eb', marginBottom: 12 }
+const btnStyle = { backgroundColor: '#f97316', color: '#fff', padding: '10px 16px', borderRadius: 8, cursor: 'pointer', width: '100%' }
 
 export default function Reset() {
-
-  const { username } = useAuthStore(state => state.auth);
-  const navigate = useNavigate();
-  const [{ isLoading, apiData, status, serverError }] = useFetch('createResetSession')
-
+  const navigate = useNavigate()
   const formik = useFormik({
-    initialValues : {
-      password : '',
-      confirm_pwd: ''
-    },
-    validate : resetPasswordValidation,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit : async values => {
-      
-      let resetPromise = resetPassword({ username, password: values.password })
-
-      toast.promise(resetPromise, {
-        loading: 'Updating...',
-        success: <b>Reset Successfully...!</b>,
-        error : <b>Could not Reset!</b>
-      });
-
-      resetPromise.then(function(){ navigate('/password') })
-
+    initialValues: { email: '' },
+    onSubmit: values => {
+      toast.success('If an account exists, a reset link has been sent.')
+      setTimeout(() => navigate('/login'), 1200)
     }
   })
 
-
-  if(isLoading) return <h1 className='text-2xl font-bold'>isLoading</h1>;
-  if(serverError) return <h1 className='text-xl text-red-500'>{serverError.message}</h1>
-  if(status && status !== 201) return <Navigate to={'/password'} replace={true}></Navigate>
-
   return (
+    <div style={containerStyle}>
+      <Toaster position="top-center" />
+      <div style={glassStyle}>
+        <h3 style={{ marginBottom: 8 }}>Password Reset</h3>
+        <p style={{ color: '#6b7280', marginBottom: 12 }}>Enter your email to receive reset instructions.</p>
 
-    
+        <form onSubmit={formik.handleSubmit}>
+          <input {...formik.getFieldProps('email')} style={textboxStyle} type="email" placeholder="Email" />
+          <button type="submit" style={btnStyle}>Send Reset</button>
+        </form>
 
-    <div className={styles.container} style={{ backgroundImage: `url(${backgroundImage})` }}> {/* Set background image here */}
-
-      <Toaster position='top-center' reverseOrder={false}></Toaster>
-
-      <div className='flex justify-center items-center h-screen'>
-        <div className={styles.glass} style={{ width : "50%"}}>
-
-          <div className="title flex flex-col items-center">
-            <h4 className='text-5xl font-bold'>Reset</h4>
-            <span className='py-4 text-xl w-2/3 text-center text-gray-500'>
-              Enter new password.
-            </span>
-          </div>
-
-          <form className='py-20' onSubmit={formik.handleSubmit}>
-              <div className="textbox flex flex-col items-center gap-6">
-                  <input {...formik.getFieldProps('password')} className={styles.textbox} type="text" placeholder='New Password' />
-                  <input {...formik.getFieldProps('confirm_pwd')} className={styles.textbox} type="text" placeholder='Repeat Password' />
-                  <button className={styles.btn} type='submit'>Reset</button>
-              </div>
-
-          </form>
-
+        <div style={{ marginTop: 12, textAlign: 'center' }}>
+          <Link to="/login" style={{ color: '#ef4444' }}>Back to Login</Link>
         </div>
       </div>
     </div>
   )
 }
+ 
