@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import avatar from '../assets/profile.png';
 import toast, { Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik';
 import { profileValidation } from '../helper/validate';
@@ -7,8 +6,42 @@ import convertToBase64 from '../helper/convert';
 import useFetch from '../hooks/fetch.hook';
 import { updateUser } from '../helper/helper';
 import { useNavigate } from 'react-router-dom';
-import styles from '../styles/Username.module.css';
-import extend from '../styles/Profile.module.css';
+
+const avatar = 'https://via.placeholder.com/80';
+
+// Inline style objects to replace external CSS modules
+const containerStyle = {
+  minHeight: '100vh',
+  backgroundImage: "url('https://cdn.pixabay.com/photo/2017/01/09/11/30/dumbbell-1966247_1280.jpg')",
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+};
+
+const glassBase = {
+  background: 'rgba(255,255,255,0.06)',
+  padding: '1.5rem',
+  borderRadius: '12px',
+};
+
+const profileImgBase = {
+  borderRadius: '9999px',
+};
+
+const textboxBase = {
+  width: '100%',
+  padding: '8px',
+  borderRadius: '8px',
+  border: '1px solid #e5e7eb',
+  fontSize: '14px',
+};
+
+const btnBase = {
+  backgroundColor: '#f97316',
+  color: 'white',
+  padding: '0.5rem 1rem',
+  borderRadius: '9999px',
+  cursor: 'pointer',
+};
 
 export default function Profile() {
   const [file, setFile] = useState();
@@ -39,13 +72,11 @@ export default function Profile() {
     },
   });
 
-  /** Formik doesn't support file upload, so we need this handler */
   const onUpload = async (e) => {
     const base64 = await convertToBase64(e.target.files[0]);
     setFile(base64);
   };
 
-  // Logout handler function
   function userLogout() {
     localStorage.removeItem('token');
     navigate('/');
@@ -55,26 +86,14 @@ export default function Profile() {
   if (serverError) return <h1 className="text-xl text-red-500">{serverError.message}</h1>;
 
   return (
-    <div
-      className={styles.container}
-      style={{
-        backgroundImage: `url('https://cdn.pixabay.com/photo/2017/01/09/11/30/dumbbell-1966247_1280.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
+    <div style={containerStyle}>
       <Toaster position="top-center" reverseOrder={false} />
 
       <div className="flex justify-center items-center h-screen">
-        <div
-          className={`${styles.glass} ${extend.glass}`}
-          style={{ width: '40%', height: '80%', paddingTop: '2em', paddingBottom: '1em' }}
-        >
+        <div style={{ ...glassBase, width: '40%', height: '80%', paddingTop: '2em', paddingBottom: '1em' }}>
           <div className="title flex flex-col items-center">
             <h4 className="text-4xl font-bold">Profile</h4>
-            <span className="py-3 text-lg w-3/4 text-center text-gray-500">
-              You can update the details.
-            </span>
+            <span className="py-3 text-lg w-3/4 text-center text-gray-500">You can update the details.</span>
           </div>
 
           <form className="py-1" onSubmit={formik.handleSubmit}>
@@ -82,9 +101,8 @@ export default function Profile() {
               <label htmlFor="profile">
                 <img
                   src={apiData?.profile || file || avatar}
-                  className={`${styles.profile_img} ${extend.profile_img}`}
                   alt="avatar"
-                  style={{ width: '80px', height: '80px' }}
+                  style={{ ...profileImgBase, width: '80px', height: '80px' }}
                 />
               </label>
               <input onChange={onUpload} type="file" id="profile" name="profile" />
@@ -92,50 +110,21 @@ export default function Profile() {
 
             <div className="textbox flex flex-col items-center gap-4">
               <div className="name flex w-3/4 gap-6">
-                <input
-                  {...formik.getFieldProps('firstName')}
-                  className={`${styles.textbox} ${extend.textbox}`}
-                  type="text"
-                  placeholder="First Name"
-                  style={{ fontSize: '14px', padding: '8px' }}
-                />
-                <input
-                  {...formik.getFieldProps('lastName')}
-                  className={`${styles.textbox} ${extend.textbox}`}
-                  type="text"
-                  placeholder="Last Name"
-                  style={{ fontSize: '14px', padding: '8px' }}
-                />
+                <input {...formik.getFieldProps('firstName')} style={{ ...textboxBase }} type="text" placeholder="First Name" />
+                <input {...formik.getFieldProps('lastName')} style={{ ...textboxBase }} type="text" placeholder="Last Name" />
               </div>
 
               <div className="name flex w-3/4 gap-6">
-                <input
-                  {...formik.getFieldProps('mobile')}
-                  className={`${styles.textbox} ${extend.textbox}`}
-                  type="text"
-                  placeholder="Mobile No."
-                  style={{ fontSize: '14px', padding: '8px' }}
-                />
-                <input
-                  {...formik.getFieldProps('email')}
-                  className={`${styles.textbox} ${extend.textbox}`}
-                  type="text"
-                  placeholder="Email*"
-                  style={{ fontSize: '14px', padding: '8px' }}
-                />
+                <input {...formik.getFieldProps('mobile')} style={{ ...textboxBase }} type="text" placeholder="Mobile No." />
+                <input {...formik.getFieldProps('email')} style={{ ...textboxBase }} type="text" placeholder="Email" />
               </div>
 
-              <input
-                {...formik.getFieldProps('address')}
-                className={`${styles.textbox} ${extend.textbox}`}
-                type="text"
-                placeholder="Address"
-                style={{ fontSize: '14px', padding: '8px' }}
-              />
+              <div className="name flex w-3/4 gap-6">
+                <input {...formik.getFieldProps('address')} style={{ ...textboxBase }} type="text" placeholder="Address" />
+                <input style={{ ...textboxBase }} type="text" placeholder="" />
+              </div>
 
-              <button className={styles.btn} type="submit" style={{ padding: '8px 16px', fontSize: '14px' }}>
-                Update
-              </button>
+              <button type="submit" style={{ ...btnBase }}>Update</button>
             </div>
 
             <div className="text-center py-3">
