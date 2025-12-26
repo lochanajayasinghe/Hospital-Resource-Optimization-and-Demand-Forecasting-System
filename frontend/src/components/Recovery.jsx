@@ -5,8 +5,6 @@ import styles from '../styles/Username.module.css';
 import { generateOTP, verifyOTP } from '../helper/helper';
 import { useNavigate } from 'react-router-dom'
 
-import backgroundImage from '../assets/background.jpg'; // Import your background image
-
 
 export default function Recovery() {
 
