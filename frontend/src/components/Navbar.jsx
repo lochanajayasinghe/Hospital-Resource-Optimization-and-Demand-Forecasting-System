@@ -1,106 +1,105 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FaBarsStaggered, FaXmark, FaCartShopping, FaUser } from "react-icons/fa6";
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { FaBarsStaggered, FaXmark } from 'react-icons/fa6'
 
-const Navbar = ({ size, setShow }) => {
-    const [isMenuOpen, setMenuOpen] = useState(false);
-    const [isSticky, setSticky] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    const navigate = useNavigate();
+const Navbar = () => {
+    const [isMenuOpen, setMenuOpen] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [isMobile, setIsMobile] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
-        // Check if user is logged in (from localStorage or other method)
-        const userToken = localStorage.getItem("token");  // This is how you store the login status
-        if (userToken) {
-            setIsLoggedIn(true);
-        }
-    }, []);
+        const token = localStorage.getItem('token')
+        if (token) setIsLoggedIn(true)
+    }, [])
 
-    const handleAuthAction = () => {
+    const location = useLocation()
+    const isHome = location?.pathname === '/'
+
+        useEffect(() => {
+            function handleResize() {
+                setIsMobile(window.innerWidth < 768)
+            }
+            handleResize()
+            window.addEventListener('resize', handleResize)
+            return () => window.removeEventListener('resize', handleResize)
+        }, [])
+
+    function handleAuth() {
         if (isLoggedIn) {
-            // Logout user
-            localStorage.removeItem("token");
-            setIsLoggedIn(false);
-            navigate("/"); // Redirect to home after logout
-        } else {
-            navigate("/login"); // Navigate to login page
-        }
-    };
+            localStorage.removeItem('token')
+            setIsLoggedIn(false)
+            navigate('/')
+        } else navigate('/login')
+    }
+
+    const headerStyle = {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        background: isHome ? 'transparent' : '#ffffff',
+        borderBottom: isHome ? 'none' : '1px solid rgba(15,23,42,0.06)',
+        zIndex: 60,
+        transition: 'background 200ms ease',
+    }
+    const innerStyle = { maxWidth: 1400, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 28px' }
+    const brandStyle = { display: 'flex', alignItems: 'center', gap: 14, textDecoration: 'none', color: isHome ? '#fff' : '#0b2160' }
+    const logoWrap = { display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: 9999, background: isHome ? 'rgba(255,255,255,0.08)' : 'rgba(14,165,233,0.08)' }
+    const logoSvg = { width: 28, height: 28, color: isHome ? '#fff' : '#06b6d4' }
+    const titleStyle = { fontSize: 20, fontWeight: 800, color: isHome ? '#fff' : '#0b2160' }
+    const navListStyle = { display: 'flex', gap: 22, alignItems: 'center', marginLeft: 20 }
+    const linkStyle = { color: isHome ? '#fff' : '#0b2160', textDecoration: 'none', fontWeight: 700 }
+    const btnStyle = { padding: '8px 14px', borderRadius: 9999, border: 'none', background: '#0fb6ad', color: '#fff', cursor: 'pointer', boxShadow: '0 4px 10px rgba(15,23,42,0.04)' }
 
     return (
-        <header className={`w-full fixed top-0 transition-all duration-500 ${isSticky ? "bg-white z-50" : "bg-black"}`}>
-            <nav className='py-4 lg:px-24'>
-                <div className='flex justify-between items-center'>
-                    <Link to="/home" className='text-2xl font-bold text-blue-700 flex items-center gap-2'>
-                        <img src="./img/logo.png" className="w-16 h-auto" alt="Logo" />
-                    </Link>
-
-                    <ul className='hidden md:flex space-x-12'>
-                        <li><Link to="/" className='text-base font-bold text-orange-400 uppercase hover:text-orange-200'>Home</Link></li>
-                        <li><Link to="/MyMeals" className='text-base font-bold text-orange-400 uppercase hover:text-orange-200'>Meal Plans</Link></li>
-                        <li><Link to="/MyWorkout" className='text-base font-bold text-orange-400 uppercase hover:text-orange-200'>Workouts</Link></li>
-                        <li><Link to="/ScheduleView" className='text-base font-bold text-orange-400 uppercase hover:text-orange-200'>Bookings</Link></li>
-                        <li><Link to="/shop" className='text-base font-bold text-orange-400 uppercase hover:text-orange-200'>Shop</Link></li>
-                        <li><Link to="/ContactUs" className='text-base font-bold text-orange-400 uppercase hover:text-orange-200'>Reviews</Link></li>
-                    </ul>
-
-                    <div className='flex items-center space-x-4'>
-                        <Link to="/cart" className='text-2xl text-blue-500 hover:text-amber-500'>
-                            <FaCartShopping />
-                        </Link>
-                        <span>{size}</span>
-
-                        <Link to="/profile" className='text-2xl text-blue-500 hover:text-amber-500'>
-                            <FaUser />
-                        </Link>
-
-                        {/* Login/Logout Button */}
-                        <button 
-                            className="btn btn-primary" 
-                            style={{ 
-                                backgroundColor: isLoggedIn ? '#dc3545' : '#007bff', 
-                                color: '#fff', 
-                                border: 'none', 
-                                borderRadius: '25px', 
-                                padding: '10px 20px', 
-                                textDecoration: 'none', 
-                                transition: 'background-color 0.3s ease, color 0.3s ease' 
-                            }} 
-                            onMouseEnter={(e) => {
-                                e.target.style.backgroundColor = isLoggedIn ? '#c82333' : '#f59e0b';
-                                e.target.style.color = 'white';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.target.style.backgroundColor = isLoggedIn ? '#dc3545' : '#007bff';
-                                e.target.style.color = '#fff';
-                            }}
-                            onClick={handleAuthAction}
-                        >
-                            {isLoggedIn ? "Logout" : "Login"}
-                        </button>
+        <header style={headerStyle}>
+            <div style={innerStyle}>
+                <Link to='/' style={brandStyle} aria-label='Home'>
+                    <div style={logoWrap}>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={logoSvg}>
+                            <path d="M12 2C13.1046 2 14 2.89543 14 4C14 5.10457 13.1046 6 12 6C10.8954 6 10 5.10457 10 4C10 2.89543 10.8954 2 12 2Z" stroke="#06b6d4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M20 12C20 13.1046 19.1046 14 18 14C16.8954 14 16 13.1046 16 12C16 10.8954 16.8954 10 18 10C19.1046 10 20 10.8954 20 12Z" stroke="#06b6d4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M12 20C13.1046 20 14 19.1046 14 18C14 16.8954 13.1046 16 12 16C10.8954 16 10 16.8954 10 18C10 19.1046 10.8954 20 12 20Z" stroke="#06b6d4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M4 12C4 13.1046 3.10457 14 2 14C0.89543 14 0 13.1046 0 12C0 10.8954 0.89543 10 2 10C3.10457 10 4 10.8954 4 12Z" stroke="#06b6d4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M7 7L17 17" stroke="#06b6d4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M17 7L7 17" stroke="#06b6d4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                     </div>
+                    <span style={titleStyle}>Hospital Resource Optimization</span>
+                </Link>
 
-                    <div className='flex items-center lg:hidden'>
-                        <button onClick={() => setMenuOpen(!isMenuOpen)} className='text-black focus:outline-none'>
-                            {isMenuOpen ? <FaXmark className='h-5 w-5 text-black' /> : <FaBarsStaggered className='h-5 w-5 text-black' />}
+                <nav style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        {!isMobile && (
+                            <div style={navListStyle}>
+                                <Link to='/' style={linkStyle}>Home</Link>
+                                <Link to='/bed-dashboard' style={linkStyle}>Bed Forecast</Link>
+                                <Link to='/login' style={linkStyle}>Login</Link>
+                            </div>
+                        )}
+
+                        {!isMobile && (
+                            <button onClick={handleAuth} style={btnStyle}>{isLoggedIn ? 'Logout' : 'Login'}</button>
+                        )}
+
+                        <button onClick={() => setMenuOpen(!isMenuOpen)} style={{ marginLeft: 8, background: 'transparent', border: 'none', cursor: 'pointer' }} aria-label='menu'>
+                            {isMenuOpen ? <FaXmark size={18} /> : <FaBarsStaggered size={18} />}
                         </button>
-                    </div>
+                </nav>
+            </div>
+
+            {isMenuOpen && (
+                <div style={{ background: '#0f172a', color: '#fff', padding: 12 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 1200, margin: '0 auto' }}>
+                            <Link to='/' style={{ color: '#fff', textDecoration: 'none' }}>Home</Link>
+                            <Link to='/bed-dashboard' style={{ color: '#fff', textDecoration: 'none' }}>Bed Forecast</Link>
+                            {isMobile && <Link to='/login' style={{ color: '#fff', textDecoration: 'none' }}>Login</Link>}
+                            {isMobile && <button onClick={handleAuth} style={{ marginTop: 8, padding: '8px 12px', borderRadius: 8, border: 'none', background: '#06b6d4', color: '#fff' }}>{isLoggedIn ? 'Logout' : 'Login'}</button>}
+                        </div>
                 </div>
-
-                {isMenuOpen && (
-                    <div className="space-y-4 px-4 mt-12 py-7 bg-blue-700 fixed top-0 right-0 left-0">
-                        <Link to="/" className='block text-base text-white uppercase cursor-pointer'>Home</Link>
-                        <Link to="/MyMeals" className='block text-base text-white uppercase cursor-pointer'>Meal Plans</Link>
-                        <Link to="/MyWorkout" className='block text-base text-white uppercase cursor-pointer'>Workouts</Link>
-                        <Link to="/ScheduleView" className='block text-base text-white uppercase cursor-pointer'>Bookings</Link>
-                        <Link to="/shop" className='block text-base text-white uppercase cursor-pointer'>Shop</Link>
-                        <Link to="/show_I" className='block text-base text-white uppercase cursor-pointer'>Reviews</Link>
-                    </div>
-                )}
-            </nav>
+            )}
         </header>
-    );
-};
+    )
+}
 
-export default Navbar;
+export default Navbar
