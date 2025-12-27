@@ -6,7 +6,7 @@ import { passwordValidate } from '../helper/validate'
 import useFetch from '../hooks/fetch.hook';
 import { useAuthStore } from '../store/store'
 import { verifyPassword } from '../helper/helper'
-import Navbar from './Navbar';
+import Navbar from './Navbar/Navbar';
 import { ReactTyped } from 'react-typed'
 
 const avatar = 'https://via.placeholder.com/80';
