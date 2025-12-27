@@ -100,7 +100,6 @@ const Navbar = () => {
                 </div>
             )}
         </header>
-        <div aria-hidden="true" style={{ height: 64, width: '100%' }} />
         </>
     )
 }
