@@ -13,26 +13,42 @@ const Footer = () => {
     { name: 'Cookie Policy', path: '/cookies' },
   ];
 
+  const footerStyles = `
+    .site-footer { 
+      margin-left: 280px; 
+      transition: margin-left 0.25s ease; 
+    }
+    @media (max-width: 900px) {
+      .site-footer { margin-left: 0; }
+    }
+  `;
+
   return (
-    <footer style={{
-      backgroundColor: '#08204a',
-      color: '#e2e8f0',
-      width: '100vw',
-      marginLeft: 'calc(50% - 50vw)',
-      boxSizing: 'border-box',
-      borderTop: '3px solid #0ea5a4',
-    }}>
+    <>
+      <style>{footerStyles}</style>
+      <footer className="site-footer" style={{
+        background: 'linear-gradient(180deg, #08204a 0%, #5b2bd6 100%)',
+        color: '#e2e8f0',
+        width: '100%',
+        boxSizing: 'border-box',
+        borderTop: '3px solid #0ea5a4',
+        overflow: 'visible',
+        padding: '40px 0'
+      }}>
       {/* Main Footer Content */}
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '48px 16px 24px',
+        padding: '18px 24px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
       }}>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(1, 1fr)',
-          gap: '40px',
-          marginBottom: '40px',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '20px',
+          marginBottom: '0',
         }}>
           {/* Brand Section */}
           <div style={{
@@ -63,20 +79,7 @@ const Footer = () => {
                   fontFamily: 'Arial, sans-serif',
                 }}>H</span>
               </div>
-              <div>
-                <h1 style={{
-                  fontSize: '28px',
-                  fontWeight: '800',
-                  background: 'linear-gradient(135deg, #0ea5a4 0%, #3b82f6 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                  margin: 0,
-                  fontFamily: 'Arial, sans-serif',
-                }}>
-                  Hospital Resource Optimization
-                </h1>
-              </div>
+              
             </div>
             <p style={{
               color: '#94a3b8',
@@ -242,91 +245,17 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Copyright Section - REMOVED the white divider line */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '16px',
-          textAlign: 'center',
-          paddingTop: '24px',
-          borderTop: '1px solid #1e293b', // Changed to dark border instead of white
-        }}>
-          <p style={{
-            color: '#94a3b8',
-            fontSize: '16px',
-            margin: 0,
-          }}>
-            © {currentYear} Hospital Resource Optimization System. All rights reserved.
-          </p>
-          
-          <div style={{
-            display: 'flex',
-            gap: '20px',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-          }}>
-            <Link 
-              to="/privacy" 
-              style={{
-                color: '#0ea5a4',
-                textDecoration: 'none',
-                fontWeight: '600',
-                fontSize: '15px',
-                transition: 'all 0.2s ease',
-                padding: '6px 12px',
-                borderRadius: '4px',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#3b82f6';
-                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 164, 0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#0ea5a4';
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
-            >
-              Privacy Policy →
-            </Link>
-            
-            <span style={{ color: '#475569', fontSize: '20px' }}>•</span>
-            
-            <Link 
-              to="/terms" 
-              style={{
-                color: '#0ea5a4',
-                textDecoration: 'none',
-                fontWeight: '600',
-                fontSize: '15px',
-                transition: 'all 0.2s ease',
-                padding: '6px 12px',
-                borderRadius: '4px',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#3b82f6';
-                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 164, 0.1)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = '#0ea5a4';
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
-            >
-              Terms of Service
-            </Link>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <div style={{ color: '#94a3b8', fontSize: 14 }}>© {currentYear} Hospital Resource Optimization System</div>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <Link to="/privacy" style={{ color: '#0ea5a4', textDecoration: 'none' }}>Privacy</Link>
+            <span style={{ color: '#94a3b8' }}>|</span>
+            <Link to="/terms" style={{ color: '#0ea5a4', textDecoration: 'none' }}>Terms</Link>
           </div>
-          
-          <p style={{
-            color: '#64748b',
-            fontSize: '14px',
-            margin: '8px 0 0',
-            fontStyle: 'italic',
-          }}>
-            Designed for healthcare excellence and operational efficiency
-          </p>
         </div>
       </div>
-    </footer>
+      </footer>
+    </>
   );
 };
 
