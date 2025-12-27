@@ -2,6 +2,14 @@
   text-align: center;
 }
 
+/* Global page background to avoid white gaps around full-bleed sections */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #0f172a;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
