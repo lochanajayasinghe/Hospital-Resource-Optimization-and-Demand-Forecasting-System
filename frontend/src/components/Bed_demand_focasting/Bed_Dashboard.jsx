@@ -1,9 +1,14 @@
 import React from 'react';
 import { Users, BedDouble, AlertTriangle, TrendingDown } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import Navbar from '../Navbar/Navbar';
+import Footer from '../Footer/Footer';
 
 const BedDashboard = () => {
+  const location = useLocation();
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ backgroundColor: '#ffffff', padding: '28px', borderRadius: 12, boxShadow: '0 8px 30px rgba(2,6,23,0.06)', color: '#0f172a' }}>
+      <Navbar />
       <h1 className="text-3xl font-bold text-slate-800">Dashboard Overview</h1>
       
       {/* KPI Cards */}
@@ -24,6 +29,7 @@ const BedDashboard = () => {
           <ProgressBar label="Maternity" percent={30} color="bg-emerald-500" />
         </div>
       </div>
+      {location?.pathname === '/bed-dashboard' && <Footer />}
     </div>
   );
 };
