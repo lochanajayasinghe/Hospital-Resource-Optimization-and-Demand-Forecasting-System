@@ -11,6 +11,13 @@ import Profile from "../components/Profile";
 import Recovery from "../components/Recovery";
 import Reset from "../components/Reset";
 import BedDashboard from "../components/Bed_demand_focasting/Bed_Dashboard";
+import Sidebar from "../components/Bed_demand_focasting/Sidebar";
+import Layout from "../components/Bed_demand_focasting/Layout";
+import Forecast from "../components/Bed_demand_focasting/Forecast";
+import Optimization from "../components/Bed_demand_focasting/Optimization";
+import DailyInput from "../components/Bed_demand_focasting/DailyInput";
+import Trends from "../components/Bed_demand_focasting/Trends";
+import Inventory from "../components/Bed_demand_focasting/Inventory";
 
 import DashboardLayout from "../dashboard/DashboardLayout";
 import Dashboard from "../dashboard/Dashboard";
@@ -31,6 +38,13 @@ const router = createBrowserRouter([
       { path: "/recovery", element: <Recovery /> },
       { path: "/reset", element: <Reset /> },
       { path: "/bed-dashboard", element: <BedDashboard /> },
+      { path: "/Sidebar", element: <Sidebar /> },
+      { path: "/Layout", element: <Layout /> },
+      { path: "/Forecast", element: <Forecast /> },
+      { path: "/Optimization", element: <Optimization /> },
+      { path: "/DailyInput", element: <DailyInput /> },
+      { path: "/Trends", element: <Trends /> },
+      { path: "/Inventory", element: <Inventory /> },
     ],
   },
   {
