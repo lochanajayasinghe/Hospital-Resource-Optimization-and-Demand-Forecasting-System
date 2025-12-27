@@ -5,7 +5,7 @@ import { useFormik } from 'formik'
 import { registerValidation } from '../helper/validate'
 import convertToBase64 from '../helper/convert'
 import { registerUser } from '../helper/helper'
-import Navbar from './Navbar'
+import Navbar from './Navbar/Navbar'
 import { ReactTyped } from 'react-typed'
 
 const avatar = 'https://via.placeholder.com/80'
