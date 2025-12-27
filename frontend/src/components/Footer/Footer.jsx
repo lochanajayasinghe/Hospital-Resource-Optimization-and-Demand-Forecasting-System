@@ -15,89 +15,315 @@ const Footer = () => {
 
   return (
     <footer style={{
-      backgroundColor: '#05232b',
-      color: '#e6eef1',
+      backgroundColor: '#08204a',
+      color: '#e2e8f0',
       width: '100vw',
       marginLeft: 'calc(50% - 50vw)',
       boxSizing: 'border-box',
-      paddingTop: 0,
+      borderTop: '3px solid #0ea5a4',
     }}>
-
-      {/* Newsletter / Top row */}
+      {/* Main Footer Content */}
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '40px 16px 24px',
-        borderBottom: '1px solid rgba(255,255,255,0.03)'
+        padding: '48px 16px 24px',
       }}>
-        <div style={{ display: 'flex', gap: 24, alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-          <div style={{ maxWidth: 640 }}>
-            <div style={{ fontSize: 12, letterSpacing: '0.12em', color: '#a7c8cc', marginBottom: 8 }}>NEWSLETTER</div>
-            <h2 style={{ margin: 0, fontSize: 20, color: '#ffffff' }}>Get hooked! Sign up to get the latest catch sent to your inbox.</h2>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(1, 1fr)',
+          gap: '40px',
+          marginBottom: '40px',
+        }}>
+          {/* Brand Section */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              marginBottom: '8px',
+            }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: 'linear-gradient(135deg, #0ea5a4 0%, #3b82f6 100%)',
+                borderRadius: '10px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 12px rgba(14, 165, 164, 0.3)',
+              }}>
+                <span style={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '24px',
+                  fontFamily: 'Arial, sans-serif',
+                }}>H</span>
+              </div>
+              <div>
+                <h1 style={{
+                  fontSize: '28px',
+                  fontWeight: '800',
+                  background: 'linear-gradient(135deg, #0ea5a4 0%, #3b82f6 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  margin: 0,
+                  fontFamily: 'Arial, sans-serif',
+                }}>
+                  Hospital Resource Optimization
+                </h1>
+              </div>
+            </div>
+            <p style={{
+              color: '#94a3b8',
+              maxWidth: '500px',
+              lineHeight: '1.6',
+              fontSize: '16px',
+              margin: '8px 0 0',
+            }}>
+              Advanced predictive analytics for hospital resource management, 
+              bed allocation optimization, and demand forecasting.
+            </p>
           </div>
 
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <input aria-label="Email" placeholder="Enter your email address" style={{ padding: '10px 14px', borderRadius: 6, border: '1px solid rgba(255,255,255,0.08)', background: 'transparent', color: '#e6eef1', minWidth: 260 }} />
-            <button style={{ background: '#e6b04a', border: 'none', padding: '10px 14px', borderRadius: 6, cursor: 'pointer' }}>Subscribe</button>
+          {/* Resources Section */}
+          <div>
+            <h3 style={{
+              color: '#f1f5f9',
+              fontSize: '20px',
+              fontWeight: '700',
+              marginBottom: '24px',
+              paddingBottom: '12px',
+              position: 'relative',
+            }}>
+              Resources
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '50px',
+                height: '3px',
+                background: 'linear-gradient(90deg, #0ea5a4, #3b82f6)',
+                borderRadius: '2px',
+              }}></div>
+            </h3>
+            <ul style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '14px',
+            }}>
+              {resources.map((resource) => (
+                <li key={resource.name}>
+                  <Link 
+                    to={resource.path} 
+                    style={{
+                      color: '#cbd5e0',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      transition: 'all 0.2s ease',
+                      fontSize: '16px',
+                      padding: '4px 0',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = '#0ea5a4';
+                      e.currentTarget.style.transform = 'translateX(5px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = '#cbd5e0';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                    }}
+                  >
+                    <span style={{
+                      width: '6px',
+                      height: '6px',
+                      backgroundColor: '#0ea5a4',
+                      borderRadius: '50%',
+                      marginRight: '12px',
+                      opacity: 0.7,
+                    }}></span>
+                    {resource.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Section */}
+          <div>
+            <h3 style={{
+              color: '#f1f5f9',
+              fontSize: '20px',
+              fontWeight: '700',
+              marginBottom: '24px',
+              paddingBottom: '12px',
+              position: 'relative',
+            }}>
+              Contact Us
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                width: '50px',
+                height: '3px',
+                background: 'linear-gradient(90deg, #0ea5a4, #3b82f6)',
+                borderRadius: '2px',
+              }}></div>
+            </h3>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px',
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}>
+                  <span style={{
+                    fontWeight: '600',
+                    color: '#0ea5a4',
+                    minWidth: '70px',
+                  }}>Email:</span>
+                  <span style={{ color: '#e2e8f0' }}>support@hospitalro.com</span>
+                </div>
+              </div>
+              
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px',
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}>
+                  <span style={{
+                    fontWeight: '600',
+                    color: '#0ea5a4',
+                    minWidth: '70px',
+                  }}>Phone:</span>
+                  <span style={{ color: '#e2e8f0' }}>+1 (555) 123-4567</span>
+                </div>
+              </div>
+              
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px',
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}>
+                  <span style={{
+                    fontWeight: '600',
+                    color: '#0ea5a4',
+                    minWidth: '70px',
+                  }}>Hours:</span>
+                  <span style={{ color: '#e2e8f0' }}>Mon-Fri 9AM-6PM EST</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main columns */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 16px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 32 }}>
-        <div>
-          <h4 style={{ color: '#dff6f7', marginBottom: 12 }}>TOFINO RESORT + MARINA</h4>
-          <address style={{ color: '#9fbec2', lineHeight: 1.8, fontStyle: 'normal' }}>
-            634 Campbell St<br />
-            Tofino BC
-          </address>
-          <div style={{ marginTop: 12 }}>
-            <div style={{ color: '#9fbec2' }}><strong>P</strong> 844.680.4184</div>
-            <div style={{ color: '#9fbec2' }}><strong>E</strong> info@hospitalro.com</div>
+        {/* Copyright Section - REMOVED the white divider line */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px',
+          textAlign: 'center',
+          paddingTop: '24px',
+          borderTop: '1px solid #1e293b', // Changed to dark border instead of white
+        }}>
+          <p style={{
+            color: '#94a3b8',
+            fontSize: '16px',
+            margin: 0,
+          }}>
+            © {currentYear} Hospital Resource Optimization System. All rights reserved.
+          </p>
+          
+          <div style={{
+            display: 'flex',
+            gap: '20px',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}>
+            <Link 
+              to="/privacy" 
+              style={{
+                color: '#0ea5a4',
+                textDecoration: 'none',
+                fontWeight: '600',
+                fontSize: '15px',
+                transition: 'all 0.2s ease',
+                padding: '6px 12px',
+                borderRadius: '4px',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#3b82f6';
+                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 164, 0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#0ea5a4';
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+            >
+              Privacy Policy →
+            </Link>
+            
+            <span style={{ color: '#475569', fontSize: '20px' }}>•</span>
+            
+            <Link 
+              to="/terms" 
+              style={{
+                color: '#0ea5a4',
+                textDecoration: 'none',
+                fontWeight: '600',
+                fontSize: '15px',
+                transition: 'all 0.2s ease',
+                padding: '6px 12px',
+                borderRadius: '4px',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#3b82f6';
+                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 164, 0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#0ea5a4';
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+            >
+              Terms of Service
+            </Link>
           </div>
-          <div style={{ marginTop: 16 }}>
-            <button style={{ padding: '8px 16px', borderRadius: 999, background: 'transparent', border: '1px solid rgba(255,255,255,0.06)', color: '#fff' }}>BOOK NOW</button>
-          </div>
-        </div>
-
-        <div>
-          <h4 style={{ color: '#dff6f7', marginBottom: 12 }}>THE ADVENTURE CENTRE + MARINA</h4>
-          <address style={{ color: '#9fbec2', lineHeight: 1.8, fontStyle: 'normal' }}>
-            634 Campbell St<br />
-            Tofino BC
-          </address>
-          <div style={{ marginTop: 12 }}>
-            <div style={{ color: '#9fbec2' }}><strong>P</strong> 778.841.0186</div>
-            <div style={{ color: '#9fbec2' }}><strong>E</strong> marina@hospitalro.com</div>
-          </div>
-          <div style={{ marginTop: 16 }}>
-            <button style={{ padding: '8px 16px', borderRadius: 999, background: 'transparent', border: '1px solid rgba(255,255,255,0.06)', color: '#fff' }}>CHOOSE YOUR ADVENTURE</button>
-          </div>
-        </div>
-
-        <div>
-          <h4 style={{ color: '#dff6f7', marginBottom: 12 }}>1909 KITCHEN</h4>
-          <address style={{ color: '#9fbec2', lineHeight: 1.8, fontStyle: 'normal' }}>
-            634 Campbell St<br />
-            Tofino BC
-          </address>
-          <div style={{ marginTop: 12 }}>
-            <div style={{ color: '#9fbec2' }}><strong>P</strong> 250.726.6122</div>
-            <div style={{ color: '#9fbec2' }}><strong>E</strong> info@hospitalro.com</div>
-          </div>
-          <div style={{ marginTop: 16 }}>
-            <button style={{ padding: '8px 16px', borderRadius: 999, background: 'transparent', border: '1px solid rgba(255,255,255,0.06)', color: '#fff' }}>RESERVE A TABLE</button>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom small copyright row */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '16px', borderTop: '1px solid rgba(255,255,255,0.03)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-        <div style={{ color: '#9fbec2' }}>© {currentYear} Hospital Resource Optimization System. All rights reserved.</div>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <Link to="/privacy" style={{ color: '#0ea5a4', textDecoration: 'none' }}>Privacy</Link>
-          <span style={{ color: '#9fbec2' }}>|</span>
-          <Link to="/terms" style={{ color: '#0ea5a4', textDecoration: 'none' }}>Terms</Link>
+          
+          <p style={{
+            color: '#64748b',
+            fontSize: '14px',
+            margin: '8px 0 0',
+            fontStyle: 'italic',
+          }}>
+            Designed for healthcare excellence and operational efficiency
+          </p>
         </div>
       </div>
     </footer>
