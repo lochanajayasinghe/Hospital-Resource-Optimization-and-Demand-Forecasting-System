@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Table } from 'flowbite-react'
 import { Link, json } from 'react-router-dom';
-import Allproducts from '../shop/Allproducts';
 import axios from "axios"
 //toast
 import { ToastContainer, toast } from 'react-toastify';
