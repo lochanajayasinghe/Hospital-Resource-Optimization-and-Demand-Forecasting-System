@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import BedDashboard from '../components/Bed_demand_focasting/Bed_Dashboard';
-import Navbar from '../components/Navbar/Navbar';
-import Footer from '../components/Footer/Footer';
+import Layout from '../components/Bed_demand_focasting/Layout';
 
 const heroStyle = {
   display: 'flex',
@@ -18,23 +17,21 @@ const heroStyle = {
 export default function Home() {
   const navigate = useNavigate();
 
-  return ( 
-    <div style={{ 
-      fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      backgroundColor: '#ffffff' // Added background color
-    }}>
-      <Navbar />
-
-      <main style={{ 
-        maxWidth: 1100, 
-        margin: '0 auto', // Changed from 28px to 0 to remove top margin
-        padding: '0 20px',
-        flex: 1,
-        width: '100%' // Added width 100%
-      }}>
+  return (
+    <Layout>
+        <div style={{
+          fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#ffffff'
+        }}>
+          <main style={{
+            maxWidth: 1400,
+            margin: '0 auto',
+            padding: '0 40px',
+            flex: 1,
+            width: '100%'
+          }}>
         {/* Hero Section - Readded with updated styling */}
        
 
@@ -280,9 +277,8 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </main>
-      
-      <Footer />
-    </div>
+        </main>
+      </div>
+    </Layout>
   );
 }
