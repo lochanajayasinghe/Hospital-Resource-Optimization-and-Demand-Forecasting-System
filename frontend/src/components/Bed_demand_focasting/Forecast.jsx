@@ -1,6 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Layout from './Layout';
+import styles from './Forecast.module.css';
 
 const data = [
   { name: 'Mon', historical: 40, predicted: 40 },
@@ -15,40 +16,47 @@ const data = [
 const Forecast = () => {
   return (
     <Layout>
-      <div className="px-6 py-8 max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-slate-800">Future Demand Forecast</h1>
-          <div className="flex items-center space-x-3">
-            <label className="text-sm text-slate-600 mr-2">Select Ward:</label>
-            <select className="p-2 border rounded-md bg-white">
-              <option>ICU</option>
-              <option>General</option>
-              <option>Maternity</option>
-            </select>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Future Demand Forecast</h1>
 
-            <label className="sr-only">Timeframe</label>
-            <select className="p-2 border rounded-md bg-white">
-              <option>Next 14 Days</option>
-              <option>Next 7 Days</option>
-              <option>Next 30 Days</option>
-            </select>
+          <div className={styles.controls}>
+            <div className={styles.controlGroup}>
+              <label className={styles.label} htmlFor="ward-select">Select Ward:</label>
+              <select id="ward-select" aria-label="Select Ward" className={styles.select}>
+                <option>ICU</option>
+                <option>General</option>
+                <option>Maternity</option>
+              </select>
+            </div>
 
-            <label className="sr-only">Model</label>
-            <select className="p-2 border rounded-md bg-white">
-              <option>LSTM</option>
-              <option>ARIMA</option>
-              <option>XGBoost</option>
-            </select>
+            <div className={styles.controlGroup}>
+              <label className={styles.label} htmlFor="timeframe">Timeframe</label>
+              <select id="timeframe" aria-label="Select Timeframe" className={styles.select}>
+                <option>Next 14 Days</option>
+                <option>Next 7 Days</option>
+                <option>Next 30 Days</option>
+              </select>
+            </div>
+
+            <div className={styles.controlGroup}>
+              <label className={styles.label} htmlFor="model">Model</label>
+              <select id="model" aria-label="Select Model" className={styles.select}>
+                <option>LSTM</option>
+                <option>ARIMA</option>
+                <option>XGBoost</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        {/* Chart Card */}
-        <div className="bg-white p-6 rounded-xl shadow border border-slate-200 mb-6" style={{ height: 420 }}>
-          <div className="flex items-start justify-between mb-3">
-            <h3 className="text-lg font-semibold text-slate-700">Bed Demand Prediction</h3>
-            <div className="text-sm text-slate-500">Historical vs Predicted</div>
+        <section className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h3 className={styles.cardTitle}>Bed Demand Prediction</h3>
+            <div className={styles.cardSub}>Historical vs Predicted</div>
           </div>
-          <div style={{ width: '100%', height: 'calc(100% - 48px)' }}>
+
+          <div className={styles.chartWrap}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data} margin={{ top: 8, right: 24, left: 8, bottom: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -61,29 +69,30 @@ const Forecast = () => {
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </section>
 
-        {/* Forecast Details Table */}
-        <div className="bg-white rounded-xl shadow border border-slate-200 overflow-hidden">
-          <div className="p-4 border-b border-slate-100">
-            <strong className="text-slate-700">Forecast Details</strong>
+        <section className={styles.tableCard}>
+          <div className={styles.tableHeader}>
+            Forecast Details
           </div>
-          <table className="w-full text-left">
-            <thead className="bg-slate-50 text-slate-600">
-              <tr>
-                <th className="p-4">Date</th>
-                <th className="p-4">Predicted Demand</th>
-                <th className="p-4">Lower Bound</th>
-                <th className="p-4">Upper Bound</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              <tr><td className="p-4">Tomorrow</td><td className="p-4">42</td><td className="p-4">38</td><td className="p-4">46</td></tr>
-              <tr><td className="p-4">+2 Days</td><td className="p-4">45</td><td className="p-4">40</td><td className="p-4">51</td></tr>
-              <tr><td className="p-4">+3 Days</td><td className="p-4">50</td><td className="p-4">44</td><td className="p-4">56</td></tr>
-            </tbody>
-          </table>
-        </div>
+          <div className={styles.tableWrap}>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Predicted Demand</th>
+                  <th>Lower Bound</th>
+                  <th>Upper Bound</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Tomorrow</td><td>42</td><td>38</td><td>46</td></tr>
+                <tr><td>+2 Days</td><td>45</td><td>40</td><td>51</td></tr>
+                <tr><td>+3 Days</td><td>50</td><td>44</td><td>56</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
     </Layout>
   );
