@@ -26,7 +26,6 @@ const Sidebar = () => {
     { icon: <Zap size={20} />, text: "Optimization", path: "/Optimization", count: "New" },
     { icon: <ClipboardList size={20} />, text: "Daily Input", path: "/DailyInput", count: null },
     { icon: <Bed size={20} />, text: "Bed Inventory", path: "/Inventory", count: 12 },
-    { icon: <Settings size={20} />, text: "Settings", path: "/settings", count: null },
   ];
 
   const [isMobile, setIsMobile] = useState(false);
