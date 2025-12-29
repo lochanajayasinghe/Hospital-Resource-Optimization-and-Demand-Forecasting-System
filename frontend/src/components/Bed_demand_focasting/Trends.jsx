@@ -1,7 +1,7 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { Calendar, Filter } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Layout from './Layout';
+import styles from './Trends.module.css';
 
 // Dummy Data for the Chart
 const historicalData = [
@@ -17,13 +17,13 @@ const historicalData = [
 const Trends = () => {
   return (
     <Layout>
-      <div className="px-6 py-8 max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-slate-800">Historical Occupancy Trends</h1>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Historical Occupancy Trends</h1>
 
-          <div className="flex items-center space-x-3">
-            <label className="text-sm text-slate-600 mr-2">Time Range:</label>
-            <select className="p-2 border rounded-md bg-white">
+          <div className={styles.controls}>
+            <label className={styles.label} htmlFor="time-range">Time Range:</label>
+            <select id="time-range" className={styles.select} aria-label="Time Range">
               <option>Last 12 Months</option>
               <option>Last 6 Months</option>
               <option>Last 3 Months</option>
@@ -31,21 +31,20 @@ const Trends = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-end mb-4">
-          <label className="text-sm text-slate-600 mr-2">Compare:</label>
-          <select className="p-2 border rounded-md bg-white">
+        <div className={styles.rightControls}>
+          <label className={styles.label} htmlFor="compare">Compare:</label>
+          <select id="compare" className={styles.select} aria-label="Compare">
             <option>All Wards</option>
             <option>ICU vs General</option>
             <option>Maternity</option>
           </select>
         </div>
 
-        {/* Chart Card */}
-        <div className="bg-white p-6 rounded-xl shadow border border-slate-200 mb-6" style={{ height: 340 }}>
-          <div style={{ textAlign: 'center', marginBottom: 8 }}>
-            <h3 className="text-lg font-semibold text-slate-700">Historical Occupancy Trends</h3>
+        <section className={styles.card}>
+          <div className={styles.centerTitle}>
+            <h3 className="" style={{fontSize:16,fontWeight:600,color:'#334155'}}>Historical Occupancy Trends</h3>
           </div>
-          <div style={{ width: '100%', height: 'calc(100% - 40px)' }}>
+          <div className={styles.chartWrap}>
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={historicalData} margin={{ top: 10, right: 24, left: 12, bottom: 6 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e6eef6" />
@@ -59,16 +58,14 @@ const Trends = () => {
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </section>
 
-        {/* Weekly Heatmap / Insights */}
-        <div className="bg-white p-6 rounded-xl shadow border border-slate-200">
-          <h4 className="text-slate-700 font-semibold mb-3">Weekly Occupancy Heatmap</h4>
-          <div style={{ height: 160, borderRadius: 8, background: 'linear-gradient(90deg,#fff,#f8fafc)' }}>
-            {/* Placeholder: replace with actual heatmap component later */}
-            <div style={{ padding: 10, color: '#64748b' }}>Heatmap visualization goes here.</div>
+        <section className={styles.card}>
+          <h4 style={{fontSize:15,fontWeight:600,color:'#334155',marginBottom:8}}>Weekly Occupancy Heatmap</h4>
+          <div className={styles.heatmap}>
+            <div>Heatmap visualization goes here.</div>
           </div>
-        </div>
+        </section>
       </div>
     </Layout>
   );
