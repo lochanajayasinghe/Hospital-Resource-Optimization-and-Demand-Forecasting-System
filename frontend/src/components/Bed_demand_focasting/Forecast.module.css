@@ -3,28 +3,36 @@
   flex-direction: column;
   gap: 1.5rem;
   font-family: 'Inter', sans-serif;
+  color: #0f172a;
 }
 
 /* Header & Controls */
 .header {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .header {
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
   }
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #0f172a;
   margin: 0;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0 0;
 }
 
 .controls {
@@ -35,41 +43,53 @@
 
 .controlGroup {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .label {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: #64748b;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .select {
-  padding: 0.5rem 1rem;
-  border: 1px solid #e2e8f0;
+  padding: 0.6rem 1rem;
+  border: 1px solid #cbd5e1;
   border-radius: 0.5rem;
   background-color: #ffffff;
   color: #334155;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
+  font-weight: 500;
   outline: none;
   cursor: pointer;
+  min-width: 140px;
   transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .select:hover {
-  border-color: #cbd5e1;
+  border-color: #94a3b8;
 }
 
 .select:focus {
   border-color: #3b82f6;
-  ring: 2px solid #3b82f633;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modelSelect {
+  color: #4f46e5;
+  font-weight: 600;
+  background-color: #f5f3ff;
+  border-color: #ddd6fe;
 }
 
 /* Cards */
 .card, .tableCard {
   background-color: #ffffff;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   border: 1px solid #f1f5f9;
   padding: 1.5rem;
@@ -78,13 +98,13 @@
 .cardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 1.5rem;
 }
 
 .cardTitle {
   font-size: 1.125rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #0f172a;
   margin: 0;
 }
@@ -92,6 +112,32 @@
 .cardSub {
   font-size: 0.875rem;
   color: #64748b;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Analysis Box (New Feature) */
+.analysisBox {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background-color: #f0f9ff;
+  border-left: 4px solid #0ea5e9;
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  color: #0369a1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.analysisIcon {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.analysisBox strong {
+  color: #0c4a6e;
 }
 
 /* Chart */
@@ -112,18 +158,20 @@
 }
 
 .table th {
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   background-color: #f8fafc;
   color: #64748b;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   border-bottom: 1px solid #e2e8f0;
 }
 
 .table td {
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   color: #334155;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   border-bottom: 1px solid #f1f5f9;
 }
 
@@ -132,10 +180,11 @@
 }
 
 .bold {
-  font-weight: 600;
+  font-weight: 700;
   color: #0f172a;
 }
 
 .subtle {
   color: #94a3b8;
+  font-family: monospace; /* optional, aligns numbers better */
 }
