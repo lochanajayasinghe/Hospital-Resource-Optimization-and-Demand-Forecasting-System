@@ -1,88 +1,189 @@
 import React, { useState } from 'react';
-import { AlertTriangle } from 'lucide-react';
+import { 
+  AlertTriangle, 
+  CheckCircle, 
+  XCircle, 
+  Users, 
+  BedDouble, 
+  ArrowRight, 
+  Play, 
+  Activity 
+} from 'lucide-react';
 import Layout from './Layout';
 import styles from './Optimization.module.css';
 
 const Optimization = () => {
-  const [beds, setBeds] = useState(5);
-  const [ward, setWard] = useState('ICU');
+  // --- STATE FOR SIMULATION ---
+  const [simQuantity, setSimQuantity] = useState(2);
+  const [simResource, setSimResource] = useState('Nurses');
+  const [simZone, setSimZone] = useState('Triage');
+  const [simResult, setSimResult] = useState(null);
 
-  // Simple mock: each bed reduces risk by ~3% up to a cap
-  const reduction = Math.min(50, Math.round(beds * 3));
+  // --- MOCK SIMULATION LOGIC ---
+  const runSimulation = () => {
+    // This simulates the "MILP" model calculating the result
+    let impactText = "";
+    let impactColor = "green";
+
+    if (simResource === 'Nurses' && simZone === 'Triage') {
+      impactText = `Wait time reduces by ${simQuantity * 15} minutes.`;
+    } else if (simResource === 'Beds' && simZone === 'Observation') {
+      impactText = `Overcrowding risk drops by ${simQuantity * 8}%.`;
+    } else if (simResource === 'Doctors' && simZone === 'Resus') {
+      impactText = `Critical response speed improves by ${simQuantity * 10}%.`;
+    } else {
+      impactText = "Resource efficiency improves by 5%.";
+    }
+
+    setSimResult(impactText);
+  };
 
   return (
-    <Layout>
+    <Layout activePage="Optimization">
       <div className={styles.container}>
-        <h1 className={styles.title}>Resource Optimization Recommendations</h1>
-
-        <div className={styles.banner} role="region" aria-label="Critical alert">
-          <div className={styles.bannerInner}>
-            <div className={styles.bannerLeft}>
-              <div className={styles.alertIcon} aria-hidden>
-                <AlertTriangle color="#991b1b" />
-              </div>
-              <div>
-                <div className={styles.alertTitle}>CRITICAL ALERT: ICU Capacity at Risk in 48 Hours.</div>
-                <div className={styles.alertDesc}>Action: Convert 4 General Ward beds to ICU immediately.</div>
-              </div>
-            </div>
-
-            <div className={styles.bannerActions}>
-              <button className={styles.btnPrimary}>Approve Transfer</button>
-              <button className={styles.btnGhost}>Ignore Alert</button>
-            </div>
+        
+        {/* --- HEADER --- */}
+        <div className={styles.header}>
+          <div>
+            <h1 className={styles.title}>Resource Optimization</h1>
+            <p className={styles.subtitle}>AI-Driven Recommendations & Simulation Engine</p>
+          </div>
+          <div className={styles.badge}>
+            <Activity size={16} />
+            <span>MILP Model Active</span>
           </div>
         </div>
 
+        {/* --- SECTION 1: CRITICAL ALERT BANNER --- */}
+        <section className={styles.alertBanner}>
+          <div className={styles.alertContent}>
+            <div className={styles.alertIconWrapper}>
+              <AlertTriangle size={24} color="#dc2626" />
+            </div>
+            <div>
+              <h3 className={styles.alertTitle}>CRITICAL ALERT: Resus Capacity at Risk</h3>
+              <p className={styles.alertText}>
+                Predicted surge in <strong>3 hours</strong> will exceed Resus beds. 
+                <br />
+                <strong>Recommendation:</strong> Move 2 stable patients from Resus to Observation immediately.
+              </p>
+            </div>
+          </div>
+          <div className={styles.alertActions}>
+            <button className={styles.btnApprove}>
+              <CheckCircle size={16} /> Approve Transfer
+            </button>
+            <button className={styles.btnIgnore}>
+              <XCircle size={16} /> Ignore
+            </button>
+          </div>
+        </section>
+
+        {/* --- SECTION 2: RECOMMENDATION CARDS --- */}
         <div className={styles.grid}>
-          <div className={styles.card}>
-            <div style={{display:'flex',gap:12,alignItems:'center'}}>
-              <div style={{width:44,height:44,borderRadius:10,background:'#fffbeb',display:'flex',alignItems:'center',justifyContent:'center'}}>👥</div>
-              <div>
-                <h3>Staffing Suggestion</h3>
-                <p>Increase night shift nursing staff in Emergency Ward for the weekend.</p>
-                <div className="cardActions">
-                  <button className={styles.btnPrimary}>Acknowledge</button>
-                </div>
+          
+          {/* Card 1: Staffing */}
+          <section className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={`${styles.iconBox} ${styles.blueIcon}`}>
+                <Users size={20} />
               </div>
+              <h3 className={styles.cardTitle}>Staffing Suggestion</h3>
             </div>
-          </div>
+            <p className={styles.cardText}>
+              High Triage load expected tonight (20:00 - 23:00).
+              <br/>
+              <strong>Action:</strong> Call in <strong>1 On-Call Nurse</strong> to assist Triage.
+            </p>
+            <button className={styles.btnActionBlue}>
+              Acknowledge & Notify
+            </button>
+          </section>
 
-          <div className={styles.card}>
-            <div style={{display:'flex',gap:12,alignItems:'center'}}>
-              <div style={{width:44,height:44,borderRadius:10,background:'#ecfdf5',display:'flex',alignItems:'center',justifyContent:'center'}}>🛏️</div>
-              <div>
-                <h3>Bed Allocation</h3>
-                <p>Maternity Ward has 10 excess beds. Consider reallocating to General Ward.</p>
-                <div className="cardActions">
-                  <button className={styles.btnPrimary}>Reallocate</button>
-                </div>
+          {/* Card 2: Bed Allocation */}
+          <section className={styles.card}>
+            <div className={styles.cardHeader}>
+              <div className={`${styles.iconBox} ${styles.purpleIcon}`}>
+                <BedDouble size={20} />
               </div>
+              <h3 className={styles.cardTitle}>Bed Allocation</h3>
             </div>
-          </div>
+            <p className={styles.cardText}>
+              Observation Zone has 4 spare beds, but Triage is full.
+              <br/>
+              <strong>Action:</strong> Convert <strong>2 Obs Beds</strong> to "Fast Track" seats temporarily.
+            </p>
+            <button className={styles.btnActionPurple}>
+              Reallocate Beds
+            </button>
+          </section>
+
         </div>
 
-        <div className={styles.card} style={{marginTop:14}}>
-          <h4 style={{fontSize:16,fontWeight:600}}>Simulation</h4>
-          <p style={{color:'#6b7280',marginTop:8}}>Test your scenarios to see impact on predicted risk.</p>
-          <div className={styles.simRow} style={{marginTop:12}}>
-            <div className={styles.simControl}>
-              <label className={styles.simLabel} htmlFor="beds-input">What if we add</label>
-              <input id="beds-input" type="number" min={0} value={beds} onChange={(e) => setBeds(Number(e.target.value))} className={styles.input} />
-            </div>
-
-            <div className={styles.simControl}>
-              <label className={styles.simLabel} htmlFor="ward-select">beds to</label>
-              <select id="ward-select" value={ward} onChange={(e) => setWard(e.target.value)} className={styles.select}>
-                <option>ICU</option>
-                <option>General</option>
-                <option>Maternity</option>
-              </select>
-            </div>
-
-            <div className={styles.resultText} aria-live="polite">? → <span style={{fontWeight:700,color:'var(--success)'}}>Risk reduced by {reduction}%</span></div>
+        {/* --- SECTION 3: INTERACTIVE SIMULATION --- */}
+        <section className={styles.simulationCard}>
+          <div className={styles.simHeader}>
+            <h3 className={styles.simTitle}>"What-If" Simulation Tool</h3>
+            <p className={styles.simSub}>Test scenarios to see predicted impact on ETU performance.</p>
           </div>
-        </div>
+
+          <div className={styles.simControls}>
+            <span className={styles.simLabel}>What if we add</span>
+            
+            {/* Input: Quantity */}
+            <input 
+              type="number" 
+              min="1" 
+              max="10"
+              className={styles.simInput} 
+              value={simQuantity}
+              onChange={(e) => setSimQuantity(e.target.value)}
+            />
+
+            {/* Input: Resource Type */}
+            <select 
+              className={styles.simSelect}
+              value={simResource}
+              onChange={(e) => setSimResource(e.target.value)}
+            >
+              <option value="Nurses">Nurses</option>
+              <option value="Doctors">Doctors</option>
+              <option value="Beds">Beds</option>
+            </select>
+
+            <span className={styles.simLabel}>to</span>
+
+            {/* Input: Zone */}
+            <select 
+              className={styles.simSelect}
+              value={simZone}
+              onChange={(e) => setSimZone(e.target.value)}
+            >
+              <option value="Triage">Triage Zone</option>
+              <option value="Resus">Resus Zone</option>
+              <option value="Observation">Observation</option>
+            </select>
+
+            <span className={styles.simLabel}>?</span>
+
+            <button className={styles.btnSimulate} onClick={runSimulation}>
+              <Play size={16} fill="white" /> Run Simulation
+            </button>
+          </div>
+
+          {/* Result Output */}
+          {simResult && (
+            <div className={styles.simResultBox}>
+              <div className={styles.simResultHeader}>
+                <ArrowRight size={20} className={styles.arrowIcon} />
+                <strong>Predicted Impact:</strong>
+              </div>
+              <p className={styles.resultText}>{simResult}</p>
+            </div>
+          )}
+
+        </section>
+
       </div>
     </Layout>
   );
