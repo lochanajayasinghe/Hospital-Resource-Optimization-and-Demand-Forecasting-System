@@ -10,59 +10,77 @@ import {
   Legend, 
   ResponsiveContainer 
 } from 'recharts';
-import { BrainCircuit, Info } from 'lucide-react'; // Make sure to install lucide-react if needed
+import { Info } from 'lucide-react';
 import Layout from './Layout';
 import styles from './Forecast.module.css';
 
 const Forecast = () => {
-  // --- STATE MANAGEMENT ---
+  // --- STATE ---
   const [timeframe, setTimeframe] = useState('Next Shift');
   const [selectedZone, setSelectedZone] = useState('Total ETU');
   const [model, setModel] = useState('TFT');
   const [chartData, setChartData] = useState([]);
   const [tableData, setTableData] = useState([]);
 
-  // --- MOCK DATA ENGINE (The "Brain") ---
+  // --- MOCK DATA ENGINE ---
   useEffect(() => {
     let generatedData = [];
     let generatedTable = [];
-    const isResus = selectedZone === 'Resus (Critical)';
     
-    // LOGIC: Adjust numbers based on Zone (Resus is small/critical, Triage is large)
-    const baseValue = isResus ? 2 : 30; 
-    const randomVar = isResus ? 2 : 15;
+    // 1. Determine Base Scale (Resus numbers are small, Total ETU is big)
+    const isResus = selectedZone.includes('Resus');
+    // Shift Average
+    const shiftAvg = isResus ? 3 : 45; 
+    // Daily Average (Shift * 2)
+    const dailyAvg = shiftAvg * 2; 
+    // Monthly Average (Daily * 30)
+    const monthlyAvg = dailyAvg * 30;
 
+    // --- LOGIC 1: NEXT SHIFT (Shift-Wise View) ---
     if (timeframe === 'Next Shift') {
-      // HOURLY DATA
       generatedData = [
-        { name: '13:00', historical: baseValue - 1, predicted: null, range: null },
-        { name: '14:00', historical: baseValue + 2, predicted: null, range: null },
-        { name: '15:00', historical: baseValue, predicted: null, range: null }, // Current Time
-        { name: '15:00', historical: null, predicted: baseValue, range: [baseValue-1, baseValue+1] }, // Connector
-        { name: '16:00', historical: null, predicted: baseValue + 5, range: [baseValue, baseValue + 10] }, // Peak
-        { name: '17:00', historical: null, predicted: baseValue + 3, range: [baseValue, baseValue + 6] },
-        { name: '18:00', historical: null, predicted: baseValue - 2, range: [baseValue-5, baseValue] },
+        { name: 'Dec 30 (Day)', historical: shiftAvg - 5, predicted: null, range: null },
+        { name: 'Dec 30 (Night)', historical: shiftAvg + 10, predicted: null, range: null },
+        { name: 'Dec 31 (Day)', historical: shiftAvg - 2, predicted: null, range: null },
+        // Connector
+        { name: 'Dec 31 (Day)', historical: null, predicted: shiftAvg - 2, range: [shiftAvg-2, shiftAvg-2] },
+        // The Prediction
+        { name: 'Dec 31 (Night)', historical: null, predicted: shiftAvg + 15, range: [shiftAvg + 10, shiftAvg + 20] },
       ];
       generatedTable = [
-        { label: '16:00 (Peak)', prediction: baseValue + 5, min: baseValue, max: baseValue + 10 },
-        { label: '17:00', prediction: baseValue + 3, min: baseValue, max: baseValue + 6 },
-        { label: '18:00', prediction: baseValue - 2, min: baseValue - 5, max: baseValue },
+        { label: 'Dec 31 (Night)', prediction: shiftAvg + 15, min: shiftAvg + 10, max: shiftAvg + 20 }
       ];
-    } else {
-      // DAILY/WEEKLY DATA
+    } 
+    
+    // --- LOGIC 2: NEXT DAY (Daily Total View) ---
+    else if (timeframe === 'Next Day') {
       generatedData = [
-        { name: 'Mon', historical: baseValue, predicted: null, range: null },
-        { name: 'Tue', historical: baseValue + 5, predicted: null, range: null },
-        { name: 'Wed', historical: baseValue - 2, predicted: null, range: null },
-        { name: 'Wed', historical: null, predicted: baseValue - 2, range: [baseValue-5, baseValue] }, // Connector
-        { name: 'Thu', historical: null, predicted: baseValue + 8, range: [baseValue+2, baseValue+15] },
-        { name: 'Fri', historical: null, predicted: baseValue + 12, range: [baseValue+5, baseValue+20] },
-        { name: 'Sat', historical: null, predicted: baseValue + 4, range: [baseValue, baseValue+8] },
+        { name: 'Dec 28', historical: dailyAvg - 10, predicted: null, range: null },
+        { name: 'Dec 29', historical: dailyAvg + 15, predicted: null, range: null },
+        { name: 'Dec 30', historical: dailyAvg - 5, predicted: null, range: null },
+        // Connector
+        { name: 'Dec 30', historical: null, predicted: dailyAvg - 5, range: [dailyAvg-5, dailyAvg-5] },
+        // The Prediction (Tomorrow)
+        { name: 'Dec 31', historical: null, predicted: dailyAvg + 20, range: [dailyAvg + 10, dailyAvg + 30] },
       ];
       generatedTable = [
-        { label: 'Thursday', prediction: baseValue + 8, min: baseValue + 2, max: baseValue + 15 },
-        { label: 'Friday', prediction: baseValue + 12, min: baseValue + 5, max: baseValue + 20 },
-        { label: 'Saturday', prediction: baseValue + 4, min: baseValue, max: baseValue + 8 },
+        { label: 'Dec 31 (Tomorrow)', prediction: dailyAvg + 20, min: dailyAvg + 10, max: dailyAvg + 30 }
+      ];
+    } 
+    
+    // --- LOGIC 3: NEXT MONTH (Monthly Total View) ---
+    else if (timeframe === 'Next Month') {
+      generatedData = [
+        { name: 'Oct', historical: monthlyAvg - 50, predicted: null, range: null },
+        { name: 'Nov', historical: monthlyAvg + 120, predicted: null, range: null },
+        { name: 'Dec', historical: monthlyAvg - 20, predicted: null, range: null },
+        // Connector
+        { name: 'Dec', historical: null, predicted: monthlyAvg - 20, range: [monthlyAvg-20, monthlyAvg-20] },
+        // The Prediction (Next Month)
+        { name: 'Jan', historical: null, predicted: monthlyAvg + 150, range: [monthlyAvg + 100, monthlyAvg + 200] },
+      ];
+      generatedTable = [
+        { label: 'January 2026', prediction: monthlyAvg + 150, min: monthlyAvg + 100, max: monthlyAvg + 200 }
       ];
     }
 
@@ -82,7 +100,6 @@ const Forecast = () => {
           </div>
 
           <div className={styles.controls}>
-            {/* 1. Zone Selector (Option B) */}
             <div className={styles.controlGroup}>
               <span className={styles.label}>Target Zone:</span>
               <select 
@@ -97,7 +114,6 @@ const Forecast = () => {
               </select>
             </div>
 
-            {/* 2. Timeframe Selector */}
             <div className={styles.controlGroup}>
               <span className={styles.label}>Timeframe:</span>
               <select 
@@ -107,12 +123,10 @@ const Forecast = () => {
               >
                 <option>Next Shift</option>
                 <option>Next Day</option>
-                <option>Next 2 Days</option>
                 <option>Next Month</option>
               </select>
             </div>
 
-            {/* 3. Model Selector */}
             <div className={styles.controlGroup}>
               <span className={styles.label}>Model:</span>
               <select 
@@ -132,10 +146,12 @@ const Forecast = () => {
           <div className={styles.cardHeader}>
             <div>
               <h3 className={styles.cardTitle}>{selectedZone} Demand: {timeframe}</h3>
-              <span className={styles.cardSub}>Observed vs {model} Prediction</span>
+              <span className={styles.cardSub}>
+                {timeframe === 'Next Shift' ? 'Shift-by-Shift Analysis' : 
+                 timeframe === 'Next Day' ? 'Daily Total Analysis' : 
+                 'Monthly Total Analysis'}
+              </span>
             </div>
-            
-            {/* Custom Legend Logic can go here if needed */}
           </div>
 
           <div className={styles.chartWrap}>
@@ -148,12 +164,14 @@ const Forecast = () => {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                
                 <XAxis 
                   dataKey="name" 
                   axisLine={false} 
                   tickLine={false} 
                   tick={{ fill: '#64748b', fontSize: 12 }} 
                   dy={10}
+                  interval={0} 
                 />
                 <YAxis 
                   axisLine={false} 
@@ -165,7 +183,6 @@ const Forecast = () => {
                 />
                 <Legend verticalAlign="top" align="right" wrapperStyle={{ paddingBottom: '20px' }}/>
                 
-                {/* Confidence Interval */}
                 <Area 
                   type="monotone" 
                   dataKey="range" 
@@ -174,38 +191,36 @@ const Forecast = () => {
                   name="Confidence Range"
                 />
 
-                {/* History */}
                 <Line 
                   type="monotone" 
                   dataKey="historical" 
                   stroke="#0ea5e9" 
                   strokeWidth={3} 
-                  dot={{ r: 4, fill: '#0ea5e9', strokeWidth: 0 }} 
+                  dot={{ r: 5, fill: '#0ea5e9', strokeWidth: 2, stroke: '#fff' }} 
                   activeDot={{ r: 6 }}
                   name="Observed Data" 
                 />
 
-                {/* Prediction */}
                 <Line 
                   type="monotone" 
                   dataKey="predicted" 
                   stroke="#f97316" 
                   strokeWidth={3} 
                   strokeDasharray="5 5"
-                  dot={{ r: 4, fill: '#f97316', strokeWidth: 0 }} 
+                  dot={{ r: 5, fill: '#f97316', strokeWidth: 2, stroke: '#fff' }} 
                   name="AI Prediction" 
                 />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
 
-          {/* --- ANALYSIS INSIGHT BOX --- */}
+          {/* --- ANALYSIS BOX --- */}
           <div className={styles.analysisBox}>
             <Info className={styles.analysisIcon} size={20} />
             <p>
-              <strong>Analysis:</strong> For <strong>{selectedZone}</strong>, the <strong>{model}</strong> model predicts a 
-              spike of <strong>{selectedZone.includes('Resus') ? '+2 Critical' : '+15%'}</strong> patients 
-              during the {timeframe === 'Next Shift' ? 'late evening hours' : 'upcoming period'}.
+              <strong>Analysis:</strong> Based on <strong>{model}</strong>, the 
+              <strong> {timeframe}</strong> prediction shows a total of <strong>{tableData[0]?.prediction}</strong> patients. 
+              {timeframe === 'Next Month' && ' This indicates a seasonal increase.'}
             </p>
           </div>
         </section>
@@ -219,8 +234,8 @@ const Forecast = () => {
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Shift / Time</th>
-                  <th>Predicted Demand</th>
+                  <th>Period</th>
+                  <th>Predicted Total</th>
                   <th>Lower Bound</th>
                   <th>Upper Bound</th>
                 </tr>
@@ -229,7 +244,7 @@ const Forecast = () => {
                 {tableData.map((row, index) => (
                   <tr key={index}>
                     <td>{row.label}</td>
-                    <td className={styles.bold}>{row.prediction} Beds</td>
+                    <td className={styles.bold}>{row.prediction}</td>
                     <td className={styles.subtle}>{row.min}</td>
                     <td className={styles.subtle}>{row.max}</td>
                   </tr>
