@@ -1,42 +1,69 @@
 import React, { useState } from 'react';
 import { 
-  AlertTriangle, 
-  CheckCircle, 
-  XCircle, 
-  Users, 
-  BedDouble, 
+  Activity, 
   ArrowRight, 
-  Play, 
-  Activity 
+  CheckCircle, 
+  AlertTriangle, 
+  Building, 
+  BedDouble, 
+  Truck, 
+  BrainCircuit 
 } from 'lucide-react';
 import Layout from './Layout';
 import styles from './Optimization.module.css';
 
 const Optimization = () => {
-  // --- STATE FOR SIMULATION ---
-  const [simQuantity, setSimQuantity] = useState(2);
-  const [simResource, setSimResource] = useState('Nurses');
-  const [simZone, setSimZone] = useState('Triage');
-  const [simResult, setSimResult] = useState(null);
+  // --- MOCK MILP ENGINE STATE ---
+  // In a real app, these come from your Python backend
+  const [currentRisk, setCurrentRisk] = useState('High'); // Low, Medium, High, Critical
+  
+  // The 3 Steps of your MILP logic
+  const steps = [
+    { 
+      id: 1, 
+      title: 'Internal Reallocation', 
+      desc: 'Move beds/staff between zones', 
+      status: 'Active', 
+      icon: BedDouble,
+      color: 'blue'
+    },
+    { 
+      id: 2, 
+      title: 'Surge Capacity', 
+      desc: 'Open overflow areas (e.g., Corridor B)', 
+      status: 'Active', 
+      icon: Building,
+      color: 'orange'
+    },
+    { 
+      id: 3, 
+      title: 'External Transfer', 
+      desc: 'Transfer stable patients to nearby hospitals', 
+      status: 'Inactive', // Only active if Step 1 & 2 fail
+      icon: Truck,
+      color: 'gray'
+    },
+  ];
 
-  // --- MOCK SIMULATION LOGIC ---
-  const runSimulation = () => {
-    // This simulates the "MILP" model calculating the result
-    let impactText = "";
-    let impactColor = "green";
-
-    if (simResource === 'Nurses' && simZone === 'Triage') {
-      impactText = `Wait time reduces by ${simQuantity * 15} minutes.`;
-    } else if (simResource === 'Beds' && simZone === 'Observation') {
-      impactText = `Overcrowding risk drops by ${simQuantity * 8}%.`;
-    } else if (simResource === 'Doctors' && simZone === 'Resus') {
-      impactText = `Critical response speed improves by ${simQuantity * 10}%.`;
-    } else {
-      impactText = "Resource efficiency improves by 5%.";
+  // Specific Actions recommended by MILP
+  const recommendations = [
+    {
+      id: 'REC-001',
+      step: 1,
+      type: 'Reallocation',
+      msg: 'Move 2 "Observation" beds to "Resus" zone temporarily.',
+      impact: 'Reduces Resus overload probability by 40%.',
+      priority: 'High'
+    },
+    {
+      id: 'REC-002',
+      step: 2,
+      type: 'Surge',
+      msg: 'Activate "Surge Area B" (Corridor) for 3 Triage patients.',
+      impact: 'Clears Triage backlog immediately.',
+      priority: 'Medium'
     }
-
-    setSimResult(impactText);
-  };
+  ];
 
   return (
     <Layout activePage="Optimization">
@@ -45,144 +72,86 @@ const Optimization = () => {
         {/* --- HEADER --- */}
         <div className={styles.header}>
           <div>
-            <h1 className={styles.title}>Resource Optimization</h1>
-            <p className={styles.subtitle}>AI-Driven Recommendations & Simulation Engine</p>
+            <h1 className={styles.title}>Optimization Engine</h1>
+            <p className={styles.subtitle}>MILP-Driven Decision Support System</p>
           </div>
-          <div className={styles.badge}>
-            <Activity size={16} />
-            <span>MILP Model Active</span>
+          <div className={styles.modelBadge}>
+            <BrainCircuit size={18} />
+            <span>MILP Model: Online</span>
           </div>
         </div>
 
-        {/* --- SECTION 1: CRITICAL ALERT BANNER --- */}
-        <section className={styles.alertBanner}>
-          <div className={styles.alertContent}>
-            <div className={styles.alertIconWrapper}>
-              <AlertTriangle size={24} color="#dc2626" />
+        {/* --- SECTION 1: SYSTEM STATUS & FORECAST --- */}
+        <div className={styles.statusCard}>
+          <div className={styles.statusLeft}>
+            <div className={styles.pulseContainer}>
+              <div className={styles.pulseRing}></div>
+              <Activity size={24} color="#dc2626" className={styles.pulseIcon} />
             </div>
             <div>
-              <h3 className={styles.alertTitle}>CRITICAL ALERT: Resus Capacity at Risk</h3>
-              <p className={styles.alertText}>
-                Predicted surge in <strong>3 hours</strong> will exceed Resus beds. 
-                <br />
-                <strong>Recommendation:</strong> Move 2 stable patients from Resus to Observation immediately.
+              <h3 className={styles.statusTitle}>Current ETU Load: Critical</h3>
+              <p className={styles.statusDesc}>
+                LSTM Model predicts demand capacity in <strong>2 Hours</strong>.
+                <br/>Optimization Protocol Activated.
               </p>
             </div>
           </div>
-          <div className={styles.alertActions}>
-            <button className={styles.btnApprove}>
-              <CheckCircle size={16} /> Approve Transfer
-            </button>
-            <button className={styles.btnIgnore}>
-              <XCircle size={16} /> Ignore
-            </button>
-          </div>
-        </section>
-
-        {/* --- SECTION 2: RECOMMENDATION CARDS --- */}
-        <div className={styles.grid}>
-          
-          {/* Card 1: Staffing */}
-          <section className={styles.card}>
-            <div className={styles.cardHeader}>
-              <div className={`${styles.iconBox} ${styles.blueIcon}`}>
-                <Users size={20} />
-              </div>
-              <h3 className={styles.cardTitle}>Staffing Suggestion</h3>
-            </div>
-            <p className={styles.cardText}>
-              High Triage load expected tonight (20:00 - 23:00).
-              <br/>
-              <strong>Action:</strong> Call in <strong>1 On-Call Nurse</strong> to assist Triage.
-            </p>
-            <button className={styles.btnActionBlue}>
-              Acknowledge & Notify
-            </button>
-          </section>
-
-          {/* Card 2: Bed Allocation */}
-          <section className={styles.card}>
-            <div className={styles.cardHeader}>
-              <div className={`${styles.iconBox} ${styles.purpleIcon}`}>
-                <BedDouble size={20} />
-              </div>
-              <h3 className={styles.cardTitle}>Bed Allocation</h3>
-            </div>
-            <p className={styles.cardText}>
-              Observation Zone has 4 spare beds, but Triage is full.
-              <br/>
-              <strong>Action:</strong> Convert <strong>2 Obs Beds</strong> to "Fast Track" seats temporarily.
-            </p>
-            <button className={styles.btnActionPurple}>
-              Reallocate Beds
-            </button>
-          </section>
-
         </div>
 
-        {/* --- SECTION 3: INTERACTIVE SIMULATION --- */}
-        <section className={styles.simulationCard}>
-          <div className={styles.simHeader}>
-            <h3 className={styles.simTitle}>"What-If" Simulation Tool</h3>
-            <p className={styles.simSub}>Test scenarios to see predicted impact on ETU performance.</p>
-          </div>
-
-          <div className={styles.simControls}>
-            <span className={styles.simLabel}>What if we add</span>
-            
-            {/* Input: Quantity */}
-            <input 
-              type="number" 
-              min="1" 
-              max="10"
-              className={styles.simInput} 
-              value={simQuantity}
-              onChange={(e) => setSimQuantity(e.target.value)}
-            />
-
-            {/* Input: Resource Type */}
-            <select 
-              className={styles.simSelect}
-              value={simResource}
-              onChange={(e) => setSimResource(e.target.value)}
-            >
-              <option value="Nurses">Nurses</option>
-              <option value="Doctors">Doctors</option>
-              <option value="Beds">Beds</option>
-            </select>
-
-            <span className={styles.simLabel}>to</span>
-
-            {/* Input: Zone */}
-            <select 
-              className={styles.simSelect}
-              value={simZone}
-              onChange={(e) => setSimZone(e.target.value)}
-            >
-              <option value="Triage">Triage Zone</option>
-              <option value="Resus">Resus Zone</option>
-              <option value="Observation">Observation</option>
-            </select>
-
-            <span className={styles.simLabel}>?</span>
-
-            <button className={styles.btnSimulate} onClick={runSimulation}>
-              <Play size={16} fill="white" /> Run Simulation
-            </button>
-          </div>
-
-          {/* Result Output */}
-          {simResult && (
-            <div className={styles.simResultBox}>
-              <div className={styles.simResultHeader}>
-                <ArrowRight size={20} className={styles.arrowIcon} />
-                <strong>Predicted Impact:</strong>
+        {/* --- SECTION 2: THE 3-STEP PROTOCOL VISUALIZATION --- */}
+        <h3 className={styles.sectionTitle}>Optimization Strategy (MILP Logic)</h3>
+        <div className={styles.strategyGrid}>
+          {steps.map((step, index) => (
+            <div key={step.id} className={`${styles.stepCard} ${styles[step.status.toLowerCase()]}`}>
+              <div className={styles.stepHeader}>
+                <span className={styles.stepNum}>Step 0{step.id}</span>
+                {step.status === 'Active' && <span className={styles.activeBadge}>Active</span>}
               </div>
-              <p className={styles.resultText}>{simResult}</p>
-            </div>
-          )}
+              
+              <div className={styles.iconCircle} style={{backgroundColor: step.status === 'Active' ? '#eff6ff' : '#f3f4f6'}}>
+                <step.icon size={24} color={step.status === 'Active' ? '#2563eb' : '#9ca3af'} />
+              </div>
 
-        </section>
+              <h4 className={styles.stepTitle}>{step.title}</h4>
+              <p className={styles.stepDesc}>{step.desc}</p>
+
+              {/* Connector Line (except for last item) */}
+              {index < steps.length - 1 && (
+                <div className={styles.connector}>
+                  <ArrowRight size={20} color="#cbd5e1" />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* --- SECTION 3: MILP RECOMMENDATIONS --- */}
+        <h3 className={styles.sectionTitle}>Generated Actions</h3>
+        <div className={styles.recGrid}>
+          {recommendations.map((rec) => (
+            <div key={rec.id} className={styles.recCard}>
+              <div className={styles.recHeader}>
+                <span className={`${styles.priorityBadge} ${rec.priority === 'High' ? styles.highPrio : styles.medPrio}`}>
+                  {rec.priority} Priority
+                </span>
+                <span className={styles.stepTag}>Step {rec.step} Strategy</span>
+              </div>
+              
+              <div className={styles.recContent}>
+                <h4 className={styles.recMsg}>{rec.msg}</h4>
+                <div className={styles.impactBox}>
+                  <CheckCircle size={16} color="#16a34a" />
+                  <span><strong>Impact:</strong> {rec.impact}</span>
+                </div>
+              </div>
+
+              <div className={styles.recActions}>
+                <button className={styles.btnApprove}>Approve Action</button>
+                <button className={styles.btnAnalyze}>Simulate Impact</button>
+              </div>
+            </div>
+          ))}
+        </div>
 
       </div>
     </Layout>
