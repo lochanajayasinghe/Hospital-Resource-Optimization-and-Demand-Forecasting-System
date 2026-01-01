@@ -27,16 +27,16 @@ const Trends = () => {
     // Shows Day Shift vs Night Shift History & Future
     if (timeframe === 'Next Shift') {
       data = [
-        { name: 'Dec 30 (Night)', Total: 60, Capacity: 50 }, // Over capacity
-        { name: 'Dec 31 (Day)', Total: 51, Capacity: 50 },
-        { name: 'Dec 31 (Night)', Total: 81, Capacity: 50 }, // The "Next Shift" (Critical)
-        { name: 'Jan 01 (Day)', Total: 43, Capacity: 50 },
+        { name: 'Jan 05 (Night)', Total: 60, Capacity: 50 }, // Over capacity
+        { name: 'Jan 06 (Day)', Total: 51, Capacity: 50 },
+        { name: 'Jan 06 (Night)', Total: 81, Capacity: 50 }, // The "Next Shift" (Critical)
+        { name: 'Jan 07 (Day)', Total: 43, Capacity: 50 },
       ];
       heat = [
-        { label: 'Dec 30 (Night)', risk: 'High' },
-        { label: 'Dec 31 (Day)', risk: 'Medium' },
-        { label: 'Dec 31 (Night)', risk: 'Critical' },
-        { label: 'Jan 01 (Day)', risk: 'Low' },
+        { label: 'Jan 05 (Night)', risk: 'High' },
+        { label: 'Jan 06 (Day)', risk: 'Medium' },
+        { label: 'Jan 06 (Night)', risk: 'Critical' },
+        { label: 'Jan 07 (Day)', risk: 'Low' },
       ];
     } 
     
@@ -44,15 +44,15 @@ const Trends = () => {
     // Shows Whole Day Counts (Day + Night combined)
     else if (timeframe === 'Next Day') {
       data = [
-        { name: 'Dec 29', Total: 103, Capacity: 100 },
-        { name: 'Dec 30', Total: 93, Capacity: 100 },
-        { name: 'Dec 31', Total: 132, Capacity: 100 }, // High predicted load
+        { name: 'Jan 04', Total: 103, Capacity: 100 },
+        { name: 'Jan 03', Total: 93, Capacity: 100 },
+        { name: 'Jan 02', Total: 132, Capacity: 100 }, // High predicted load
         { name: 'Jan 01', Total: 85, Capacity: 100 },
       ];
       heat = [
-        { label: 'Dec 29', risk: 'Medium' },
-        { label: 'Dec 30', risk: 'Low' },
-        { label: 'Dec 31', risk: 'Critical' },
+        { label: 'Jan 04', risk: 'Medium' },
+        { label: 'Jan 03', risk: 'Low' },
+        { label: 'Jan 02', risk: 'Critical' },
         { label: 'Jan 01', risk: 'Low' },
       ];
     } 
