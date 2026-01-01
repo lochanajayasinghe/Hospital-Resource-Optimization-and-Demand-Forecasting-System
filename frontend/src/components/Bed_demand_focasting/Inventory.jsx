@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Plus, MoreVertical, Bed } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Layout from './Layout';
 import styles from './Inventory.module.css';
 
@@ -49,10 +50,10 @@ const BedInventory = () => {
               <h1 className={styles.title}>Real-Time Bed Status</h1>
               <p className={styles.subtitle}>Physical asset tracking (Total Capacity: 20)</p>
             </div>
-            <button className={styles.addBtn} aria-label="Add new bed">
+            <Link to="/AddBed" className={styles.addBtn} aria-label="Add new bed">
               <Plus size={18} />
               <span>Add New Bed</span>
-            </button>
+            </Link>
           </div>
         </div>
 
