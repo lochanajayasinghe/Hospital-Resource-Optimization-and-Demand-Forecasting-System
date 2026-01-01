@@ -21,11 +21,11 @@ import {
 const Sidebar = () => {
   const menuItems = [
     { icon: <LayoutDashboard size={20} />, text: "Dashboard", path: "/bed-dashboard", count: null },
-    { icon: <TrendingUp size={20} />, text: "Forecasts", path: "/Forecast", count: 3 },
+    { icon: <TrendingUp size={20} />, text: "Forecasts", path: "/Forecast", count: null },
     { icon: <Activity size={20} />, text: "Trends", path: "/Trends", count: null },
-    { icon: <Zap size={20} />, text: "Optimization", path: "/Optimization", count: "New" },
+    { icon: <Zap size={20} />, text: "Optimization", path: "/Optimization", count: null },
     { icon: <ClipboardList size={20} />, text: "Daily Input", path: "/DailyInput", count: null },
-    { icon: <Bed size={20} />, text: "Bed Inventory", path: "/Inventory", count: 12 },
+    { icon: <Bed size={20} />, text: "Bed Inventory", path: "/Inventory", count: null },
   ];
 
   const [isMobile, setIsMobile] = useState(false);
