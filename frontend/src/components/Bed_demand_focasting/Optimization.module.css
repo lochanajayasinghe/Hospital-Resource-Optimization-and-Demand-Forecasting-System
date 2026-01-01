@@ -79,22 +79,31 @@
 .strategyGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 32px;
   margin-bottom: 48px;
   position: relative;
 }
 
 .stepCard {
-  background: white;
   padding: 24px;
   border-radius: 16px;
-  border: 1px solid #e2e8f0;
+  border: 2px solid transparent;
   position: relative;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
 }
 
-.active { border-color: #3b82f6; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.1); }
-.inactive { opacity: 0.6; background: #f8fafc; }
+.activeCard {
+  background: white;
+  border-color: #3b82f6;
+  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
+  transform: translateY(-4px);
+}
+
+.inactiveCard {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  opacity: 0.7;
+}
 
 .stepHeader { display: flex; justify-content: space-between; margin-bottom: 16px; }
 .stepNum { font-size: 12px; font-weight: 700; color: #94a3b8; letter-spacing: 0.05em; }
@@ -113,6 +122,17 @@
 .stepTitle { font-size: 16px; font-weight: 700; margin: 0 0 8px 0; }
 .stepDesc { font-size: 13px; color: #64748b; line-height: 1.5; margin: 0; }
 
+/* Connector Arrow */
+.connector {
+  position: absolute;
+  right: -28px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #cbd5e1;
+  z-index: 10;
+}
+.connectorActive { color: #3b82f6; }
+
 /* Recommendation Cards */
 .recGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
@@ -127,8 +147,8 @@
   font-size: 11px; font-weight: 700; text-transform: uppercase;
   padding: 4px 10px; border-radius: 999px;
 }
-.highPrio { background: #fef2f2; color: #dc2626; }
-.medPrio { background: #fff7ed; color: #ea580c; }
+.critPrio { background: #fef2f2; color: #dc2626; }
+.highPrio { background: #fff7ed; color: #ea580c; }
 
 .stepTag { font-size: 12px; color: #64748b; font-weight: 500; }
 
@@ -153,4 +173,5 @@
 
 @media (max-width: 800px) {
   .strategyGrid, .recGrid { grid-template-columns: 1fr; }
+  .connector { display: none; } /* Hide arrows on mobile */
 }
