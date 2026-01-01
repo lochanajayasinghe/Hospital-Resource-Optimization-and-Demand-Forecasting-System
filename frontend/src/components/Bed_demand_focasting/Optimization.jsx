@@ -3,7 +3,6 @@ import {
   Activity, 
   ArrowRight, 
   CheckCircle, 
-  AlertTriangle, 
   Building, 
   BedDouble, 
   Truck, 
@@ -14,15 +13,14 @@ import styles from './Optimization.module.css';
 
 const Optimization = () => {
   // --- MOCK MILP ENGINE STATE ---
-  // In a real app, these come from your Python backend
-  const [currentRisk, setCurrentRisk] = useState('High'); // Low, Medium, High, Critical
+  const [currentRisk, setCurrentRisk] = useState('High'); 
   
-  // The 3 Steps of your MILP logic
+  // The 3-Step Protocol (Standard Disaster Medicine Logic)
   const steps = [
     { 
       id: 1, 
-      title: 'Internal Reallocation', 
-      desc: 'Move beds/staff between zones', 
+      title: 'Internal Flow', 
+      desc: 'Speed up discharges & internal movements', 
       status: 'Active', 
       icon: BedDouble,
       color: 'blue'
@@ -37,30 +35,30 @@ const Optimization = () => {
     },
     { 
       id: 3, 
-      title: 'External Transfer', 
-      desc: 'Transfer stable patients to nearby hospitals', 
-      status: 'Inactive', // Only active if Step 1 & 2 fail
+      title: 'External Diversion', 
+      desc: 'Divert ambulances to nearby hospitals', 
+      status: 'Inactive', 
       icon: Truck,
       color: 'gray'
     },
   ];
 
-  // Specific Actions recommended by MILP
+  // Recommendations adjusted for "Single ETU" (Focus on Flow & Capacity)
   const recommendations = [
     {
       id: 'REC-001',
       step: 1,
-      type: 'Reallocation',
-      msg: 'Move 2 "Observation" beds to "Resus" zone temporarily.',
-      impact: 'Reduces Resus overload probability by 40%.',
+      type: 'Flow Optimization',
+      msg: 'Expedite transfer for 4 patients waiting for General Ward beds.',
+      impact: 'Reduces current ETU saturation by 15%.',
       priority: 'High'
     },
     {
       id: 'REC-002',
       step: 2,
-      type: 'Surge',
-      msg: 'Activate "Surge Area B" (Corridor) for 3 Triage patients.',
-      impact: 'Clears Triage backlog immediately.',
+      type: 'Surge Activation',
+      msg: 'Activate "Surge Area B" to accommodate 5 pending arrivals.',
+      impact: 'Prevents blocking of the ambulance bay.',
       priority: 'Medium'
     }
   ];
@@ -81,7 +79,7 @@ const Optimization = () => {
           </div>
         </div>
 
-        {/* --- SECTION 1: SYSTEM STATUS & FORECAST --- */}
+        {/* --- SECTION 1: SYSTEM STATUS --- */}
         <div className={styles.statusCard}>
           <div className={styles.statusLeft}>
             <div className={styles.pulseContainer}>
@@ -89,16 +87,16 @@ const Optimization = () => {
               <Activity size={24} color="#dc2626" className={styles.pulseIcon} />
             </div>
             <div>
-              <h3 className={styles.statusTitle}>Current ETU Load: Critical</h3>
+              <h3 className={styles.statusTitle}>Current Unit Load: Critical</h3>
               <p className={styles.statusDesc}>
-                LSTM Model predicts demand capacity in <strong>2 Hours</strong>.
+                Model predicts <strong>Total Capacity Exceeded</strong> in 2 Hours.
                 <br/>Optimization Protocol Activated.
               </p>
             </div>
           </div>
         </div>
 
-        {/* --- SECTION 2: THE 3-STEP PROTOCOL VISUALIZATION --- */}
+        {/* --- SECTION 2: 3-STEP PROTOCOL --- */}
         <h3 className={styles.sectionTitle}>Optimization Strategy (MILP Logic)</h3>
         <div className={styles.strategyGrid}>
           {steps.map((step, index) => (
@@ -115,7 +113,7 @@ const Optimization = () => {
               <h4 className={styles.stepTitle}>{step.title}</h4>
               <p className={styles.stepDesc}>{step.desc}</p>
 
-              {/* Connector Line (except for last item) */}
+              {/* Visual Connector Line */}
               {index < steps.length - 1 && (
                 <div className={styles.connector}>
                   <ArrowRight size={20} color="#cbd5e1" />
@@ -125,8 +123,8 @@ const Optimization = () => {
           ))}
         </div>
 
-        {/* --- SECTION 3: MILP RECOMMENDATIONS --- */}
-        <h3 className={styles.sectionTitle}>Generated Actions</h3>
+        {/* --- SECTION 3: GENERATED ACTIONS --- */}
+        <h3 className={styles.sectionTitle}>Recommended Actions</h3>
         <div className={styles.recGrid}>
           {recommendations.map((rec) => (
             <div key={rec.id} className={styles.recCard}>
@@ -134,7 +132,7 @@ const Optimization = () => {
                 <span className={`${styles.priorityBadge} ${rec.priority === 'High' ? styles.highPrio : styles.medPrio}`}>
                   {rec.priority} Priority
                 </span>
-                <span className={styles.stepTag}>Step {rec.step} Strategy</span>
+                <span className={styles.stepTag}>Step {rec.step} Protocol</span>
               </div>
               
               <div className={styles.recContent}>
