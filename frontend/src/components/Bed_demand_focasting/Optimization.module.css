@@ -1,5 +1,5 @@
 .container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 24px auto;
   padding: 20px;
   font-family: 'Inter', sans-serif;
@@ -11,167 +11,203 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
-.title { font-size: 28px; font-weight: 700; margin: 0; color: #0f172a; }
-.subtitle { color: #64748b; margin: 4px 0 0 0; font-size: 14px; }
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #0f172a;
+}
 
-.modelBadge {
+.subtitle {
+  color: #64748b;
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.statusBadge {
+  background: #ecfdf5;
+  color: #047857;
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #0f172a;
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+  border: 1px solid #a7f3d0;
 }
 
-/* Status Card */
-.statusCard {
-  background: #fef2f2;
-  border: 1px solid #fee2e2;
-  border-left: 5px solid #dc2626;
-  padding: 24px;
-  border-radius: 12px;
-  margin-bottom: 40px;
-}
-
-.statusLeft { display: flex; gap: 20px; align-items: center; }
-
-/* Pulse Animation */
-.pulseContainer {
-  position: relative;
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
+.statusDot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 0 0 2px #d1fae5;
 }
 
-.pulseRing {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 2px solid #dc2626;
-  animation: pulse 2s infinite;
-  opacity: 0;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(2); opacity: 0; }
-}
-
-.statusTitle { margin: 0 0 4px 0; font-size: 18px; color: #991b1b; font-weight: 700; }
-.statusDesc { margin: 0; color: #7f1d1d; font-size: 14px; line-height: 1.5; }
-
-/* 3-Step Strategy Visual */
-.sectionTitle { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: #334155; }
-
-.strategyGrid {
+/* Grid Layout */
+.grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  margin-bottom: 48px;
-  position: relative;
+  grid-template-columns: 1fr 1.4fr; /* Right side slightly wider */
+  gap: 24px;
 }
 
-.stepCard {
-  padding: 24px;
-  border-radius: 16px;
-  border: 2px solid transparent;
-  position: relative;
-  transition: all 0.3s ease;
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
 }
 
-.activeCard {
+/* Cards */
+.forecastCard, .actionCard {
   background: white;
-  border-color: #3b82f6;
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.15);
-  transform: translateY(-4px);
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
 }
 
-.inactiveCard {
-  background: #f8fafc;
-  border-color: #e2e8f0;
-  opacity: 0.7;
+.cardHeader {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.stepHeader { display: flex; justify-content: space-between; margin-bottom: 16px; }
-.stepNum { font-size: 12px; font-weight: 700; color: #94a3b8; letter-spacing: 0.05em; }
-
-.activeBadge {
-  background: #eff6ff; color: #2563eb; font-size: 11px; font-weight: 700;
-  padding: 2px 8px; border-radius: 4px; text-transform: uppercase;
+.cardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
 }
 
-.iconCircle {
-  width: 48px; height: 48px; border-radius: 12px;
+/* Left Panel Styles */
+.bigNumberContainer {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.label { font-size: 14px; color: #64748b; font-weight: 500; }
+.bigNumber { font-size: 64px; font-weight: 800; color: #2563eb; line-height: 1.1; }
+.subLabel { font-size: 13px; color: #94a3b8; }
+
+.driverBox {
+  background: #eff6ff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #dbeafe;
+}
+
+.driverTitle { font-size: 12px; color: #1e40af; text-transform: uppercase; margin: 0 0 8px 0; }
+.driverContent { display: flex; align-items: center; gap: 10px; font-weight: 700; color: #1e3a8a; font-size: 16px; margin-bottom: 8px; }
+.driverIcon { color: #2563eb; }
+.driverDesc { font-size: 13px; color: #3b82f6; margin: 0; line-height: 1.5; }
+
+.confidenceBox {
+  margin-top: auto;
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Right Panel Styles (Action Plan) */
+.planList { display: flex; flex-direction: column; gap: 20px; flex-grow: 1; }
+
+.planItem {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.planItem:last-child { border-bottom: none; }
+
+.planIconGreen, .planIconBlue {
+  width: 40px; height: 40px;
+  border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+.planIconGreen { background: #f0fdf4; color: #16a34a; }
+.planIconBlue { background: #eff6ff; color: #2563eb; }
+
+.planDetails h4 { margin: 0 0 4px 0; font-size: 16px; font-weight: 700; color: #0f172a; }
+.planDetails p { margin: 0; font-size: 13px; color: #64748b; }
+
+.transferList {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0 0;
+  width: 100%;
 }
 
-.stepTitle { font-size: 16px; font-weight: 700; margin: 0 0 8px 0; }
-.stepDesc { font-size: 13px; color: #64748b; line-height: 1.5; margin: 0; }
-
-/* Connector Arrow */
-.connector {
-  position: absolute;
-  right: -28px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #cbd5e1;
-  z-index: 10;
-}
-.connectorActive { color: #3b82f6; }
-
-/* Recommendation Cards */
-.recGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-
-.recCard {
-  background: white; border: 1px solid #e2e8f0; border-radius: 12px;
-  padding: 24px; display: flex; flex-direction: column;
+.transferList li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 6px 0;
+  color: #334155;
+  border-bottom: 1px solid #f8fafc;
 }
 
-.recHeader { display: flex; justify-content: space-between; margin-bottom: 16px; }
-
-.priorityBadge {
-  font-size: 11px; font-weight: 700; text-transform: uppercase;
-  padding: 4px 10px; border-radius: 999px;
+.planCountGreen, .planCountBlue {
+  font-size: 24px; font-weight: 700; margin-left: auto;
 }
-.critPrio { background: #fef2f2; color: #dc2626; }
-.highPrio { background: #fff7ed; color: #ea580c; }
+.planCountGreen { color: #16a34a; }
+.planCountBlue { color: #2563eb; }
 
-.stepTag { font-size: 12px; color: #64748b; font-weight: 500; }
-
-.recMsg { font-size: 16px; font-weight: 600; margin: 0 0 12px 0; line-height: 1.5; }
-
-.impactBox {
-  background: #f0fdf4; border-radius: 8px; padding: 12px;
-  display: flex; gap: 8px; align-items: flex-start;
-  font-size: 13px; color: #166534; margin-bottom: 20px;
+/* Surge Box (Red Alert) */
+.surgeBox {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 16px;
 }
 
-.recActions { margin-top: auto; display: flex; gap: 12px; }
+.surgeHeader {
+  display: flex; align-items: center; gap: 10px; color: #dc2626; margin-bottom: 8px;
+}
+.surgeHeader h4 { margin: 0; font-weight: 700; font-size: 15px; }
+
+.surgeContent {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.surgeContent p { margin: 0; color: #991b1b; font-size: 14px; }
+.surgeCount { font-size: 28px; font-weight: 800; color: #dc2626; }
+
+/* Footer Button */
+.actionFooter { margin-top: 24px; }
 
 .btnApprove {
-  flex: 1; background: #2563eb; color: white; border: none;
-  padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;
+  width: 100%;
+  background: #0f172a;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-.btnAnalyze {
-  flex: 1; background: white; border: 1px solid #e2e8f0; color: #475569;
-  padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;
-}
+.btnApprove:hover { background: #1e293b; }
 
-@media (max-width: 800px) {
-  .strategyGrid, .recGrid { grid-template-columns: 1fr; }
-  .connector { display: none; } /* Hide arrows on mobile */
+.btnApproved {
+  width: 100%;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
 }
