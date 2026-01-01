@@ -1,66 +1,153 @@
 import React from 'react';
-import { Users, BedDouble, Clock, Activity, AlertTriangle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { 
+  Users, 
+  BedDouble, 
+  Clock, 
+  Activity, 
+  AlertTriangle, 
+  CloudRain, // New Icon for the "Driver"
+  ArrowRight 
+} from 'lucide-react';
 import Layout from './Layout';
 
 const BedDashboard = () => {
 
-  // Current Total Occupancy (Mock Data)
-  const totalOccupancy = 90; // 90% full
-  const occupancyColor = totalOccupancy > 85 ? '#ef4444' : totalOccupancy > 60 ? '#f59e0b' : '#10b981';
-  const occupancyStatus = totalOccupancy > 85 ? 'CRITICAL' : totalOccupancy > 60 ? 'High' : 'Normal';
+  // --- MOCK REAL-TIME DATA ---
+  const totalOccupancy = 90; 
+  const occupancyColor = '#ef4444'; // Red for Critical
+  const occupancyStatus = 'CRITICAL';
+
+  // --- MOCK PREDICTION DATA (The "Why") ---
+  const prediction = {
+    count: 29,
+    driver: 'Heavy Rainfall Alert',
+    risk: 'High',
+    time: 'Night Shift'
+  };
+
+  const isCritical = totalOccupancy > 85;
+
+  const bannerBase = {
+    borderRadius: 16,
+    padding: 24,
+    marginBottom: 32,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 20,
+  };
+
+  const bannerStyle = isCritical
+    ? {
+        ...bannerBase,
+        background: 'linear-gradient(135deg, #fff7f6 0%, #fee2e2 100%)',
+        border: '1px solid #fecaca',
+      }
+    : {
+        ...bannerBase,
+        background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+        border: '1px solid #bfdbfe',
+      };
 
   return (
     <Layout activePage="Dashboard">
       <div style={{ padding: 28, maxWidth: 1100, margin: '24px auto', color: '#0f172a' }}>
         
-        {/* Updated Title for ETU Pilot */}
+        {/* --- HEADER --- */}
         <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
           <div>
             <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0 }}>ETU Operations Dashboard</h1>
             <p style={{ color: '#64748b', marginTop: 4 }}>Emergency Treatment Unit • Real-time Status</p>
           </div>
+          
+          {/* System Status Badge */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: occupancyColor, background: '#fff', padding: '6px 12px', borderRadius: 20, boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
             <div style={{ width: 8, height: 8, borderRadius: '50%', background: occupancyColor, boxShadow: `0 0 0 2px ${occupancyColor}33` }}></div>
             System Status: {occupancyStatus}
           </div>
         </div>
 
-        {/* KPI Cards */}
+        {/* --- NEW: AI PREDICTION ALERT BANNER --- */}
+        {/* This answers: "Why is the load high?" and links to Optimization */}
+        <div style={bannerStyle}>
+          
+          {/* Left: The Prediction Context */}
+          <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+            <div style={{ 
+              background: '#fff', width: 56, height: 56, borderRadius: 12, 
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: isCritical ? '0 6px 10px -4px rgba(239,68,68,0.12)' : '0 4px 6px -1px rgba(59, 130, 246, 0.1)'
+            }}>
+              <CloudRain size={28} color={isCritical ? occupancyColor : '#2563eb'} />
+            </div>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: isCritical ? '#7f1d1d' : '#1e40af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                AI Forecast • {prediction.time}
+              </div>
+              <div style={{ fontSize: 20, fontWeight: 700, color: isCritical ? '#7f1d1d' : '#1e3a8a', marginTop: 2 }}>
+                Expect {prediction.count} Patients (+35%)
+              </div>
+              <div style={{ fontSize: 14, color: isCritical ? '#b91c1c' : '#3b82f6', marginTop: 2 }}>
+                Primary Driver: <strong>{prediction.driver}</strong>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: The Call to Action (Button) */}
+          <div>
+            <Link to="/Optimization" style={{ textDecoration: 'none' }}>
+              <button style={{ 
+                background: occupancyColor || '#ef4444', 
+                color: '#fff', 
+                border: 'none', 
+                padding: '12px 24px', 
+                borderRadius: 8, 
+                fontSize: 14, 
+                fontWeight: 600, 
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                boxShadow: '0 4px 12px rgba(239,68,68,0.18)',
+                transition: 'transform 0.2s',
+              }}>
+                View Optimization Plan <ArrowRight size={16} />
+              </button>
+            </Link>
+          </div>
+        </div>
+
+        {/* --- KPI CARDS --- */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 18, marginBottom: 28 }}>
-          {/* Card 1: Fixed Capacity */}
           <StatCard 
             icon={<BedDouble size={24} color="#2563eb" />} 
-            title="Total ETU Beds" 
-            value="20" 
-            sub="Fixed Capacity"
+            title="Total Capacity" 
+            value="20 Beds" 
+            sub="Fixed Unit Size"
           />
-          
-          {/* Card 2: Real-time Occupancy */}
           <StatCard 
             icon={<Users size={24} color={occupancyColor} />} 
             title="Current Occupancy" 
             value={`${totalOccupancy}%`} 
             sub="18 / 20 Beds Full"
           />
-          
-          {/* Card 3: Shift Forecast */}
           <StatCard 
-            icon={<Activity size={24} color="#9333ea" />} 
-            title="Next Shift Forecast" 
-            value="High Load" 
-            sub="~12 Admissions Expected"
+            icon={<Activity size={24} color={occupancyColor} />} 
+            title="Next Shift Load" 
+            value="Critical" 
+            sub="Predicted: 29 Arrivals"
           />
-          
-          {/* Card 4: Bottlenecks */}
           <StatCard 
             icon={<Clock size={24} color="#ea580c" />} 
-            title="Pending Transfers" 
+            title="Bottlenecks" 
             value="4" 
-            sub="Waiting for Gen. Ward"
+            sub="Pending Ward Transfer"
           />
         </div>
 
-        {/* --- NEW: SINGLE ETU SATURATION GAUGE --- */}
+        {/* --- LIVE UNIT SATURATION GAUGE --- */}
         <div style={{ background: '#fff', padding: 32, borderRadius: 16, boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
           
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
@@ -74,14 +161,9 @@ const BedDashboard = () => {
             </div>
           </div>
 
-          {/* Large Progress Bar */}
           <div style={{ position: 'relative', height: 24, background: '#f1f5f9', borderRadius: 999, marginBottom: 30, overflow: 'hidden' }}>
-            
-            {/* Background Markers for Safe/Warning/Critical Zones */}
             <div style={{ position: 'absolute', left: '60%', height: '100%', width: 2, background: '#fff', zIndex: 10 }}></div>
             <div style={{ position: 'absolute', left: '85%', height: '100%', width: 2, background: '#fff', zIndex: 10 }}></div>
-
-            {/* The Fill Bar */}
             <div style={{ 
               width: `${totalOccupancy}%`, 
               height: '100%', 
@@ -91,7 +173,6 @@ const BedDashboard = () => {
             }} />
           </div>
 
-          {/* Legend / Scale */}
           <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748b', fontSize: 12, fontWeight: 600, textTransform: 'uppercase' }}>
             <span>0% (Empty)</span>
             <span style={{ paddingLeft: 40 }}>60% (Busy)</span>
@@ -99,16 +180,16 @@ const BedDashboard = () => {
             <span>100% (Full)</span>
           </div>
 
-          {/* Action Recommendation Box */}
+          {/* Critical Alert Recommendation */}
           {totalOccupancy > 85 && (
             <div style={{ marginTop: 24, background: '#fef2f2', border: '1px solid #fee2e2', borderRadius: 12, padding: 16, display: 'flex', gap: 12, alignItems: 'center' }}>
               <div style={{ background: '#fff', padding: 8, borderRadius: '50%', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
                  <AlertTriangle size={20} color="#dc2626" />
               </div>
               <div>
-                <h4 style={{ margin: 0, color: '#991b1b', fontSize: 15, fontWeight: 700 }}>Action Required: Activate Overflow Protocol</h4>
+                <h4 style={{ margin: 0, color: '#991b1b', fontSize: 15, fontWeight: 700 }}>Immediate Action Required</h4>
                 <p style={{ margin: '4px 0 0 0', color: '#7f1d1d', fontSize: 13 }}>
-                  Unit is above 85% capacity. Limit new non-critical admissions and expedite transfers.
+                  Unit is critical. Click "View Optimization Plan" above to execute surge protocols.
                 </p>
               </div>
             </div>
@@ -121,15 +202,10 @@ const BedDashboard = () => {
   );
 };
 
-// --- Helper Components ---
-
+// --- Helper Component ---
 const StatCard = ({ icon, title, value, sub }) => (
   <div style={{ background: '#fff', padding: 20, borderRadius: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.02)', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
-    <div style={{ 
-      minWidth: 48, height: 48, borderRadius: 10, 
-      background: '#f8fafc', 
-      display: 'flex', alignItems: 'center', justifyContent: 'center' 
-    }}>
+    <div style={{ minWidth: 48, height: 48, borderRadius: 10, background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {icon}
     </div>
     <div>
