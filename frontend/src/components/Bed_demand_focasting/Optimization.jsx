@@ -6,7 +6,6 @@ import {
   AlertTriangle, 
   BedDouble, 
   Calendar,
-  ThermometerSun,
   Activity
 } from 'lucide-react';
 import Layout from './Layout';
@@ -14,25 +13,29 @@ import styles from './Optimization.module.css';
 
 const Optimization = () => {
   // --- MOCK DATA ---
-  // In real life, these come from your TFT (Forecast) and MILP (Optimization) backends.
+  // Scenario: 29 Patients Expected
+  // Logic: 
+  // - 7 Stay (Observation)
+  // - 13 Transfer (4 Pending + 9 New)
+  // - 9 Surge (Overflow)
   const forecastData = {
     date: '2025-12-31',
     shift: 'Night Shift',
     expectedPatients: 29,
     capacity: 20,
-    driver: 'Heavy Rainfall Alert', // The "Why"
+    driver: 'Heavy Rainfall Alert', 
     driverIcon: CloudRain,
     confidence: 'High (92%)'
   };
 
   const actionPlan = {
-    keepInETU: 7,
+    keepInETU: 7, // Matches "Keep in ETU" on Dashboard
     transfers: [
-      { ward: 'Ward A (Medical)', count: 4, type: 'Internal' },
+      { ward: 'Ward A (Medical)', count: 4, type: 'Internal' }, // Matches "4 Pending Transfers" on Dashboard
       { ward: 'Ward B (Surgical)', count: 4, type: 'Internal' },
-      { ward: 'Maternity Ward', count: 5, type: 'Internal' } // Only applicable if female/relevant
+      { ward: 'Maternity Ward', count: 5, type: 'Internal' } 
     ],
-    surge: 9 // Critical Overflow
+    surge: 9 // The remaining overflow
   };
 
   const [isApproved, setIsApproved] = useState(false);
