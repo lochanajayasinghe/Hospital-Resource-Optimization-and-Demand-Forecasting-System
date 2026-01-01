@@ -7,7 +7,8 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer 
+  ResponsiveContainer,
+  ReferenceLine
 } from 'recharts';
 import { AlertTriangle } from 'lucide-react';
 import Layout from './Layout';
@@ -23,17 +24,17 @@ const Trends = () => {
     let heat = [];
 
     // --- LOGIC 1: NEXT SHIFT (Granularity: Shift-by-Shift) ---
-    // Shows Day Shift vs Night Shift
+    // Shows Day Shift vs Night Shift History & Future
     if (timeframe === 'Next Shift') {
       data = [
-        { name: 'Dec 30 (Night)', Triage: 40, Resus: 5, Obs: 15 },
-        { name: 'Dec 31 (Day)', Triage: 35, Resus: 4, Obs: 12 },
-        { name: 'Dec 31 (Night)', Triage: 55, Resus: 8, Obs: 18 }, // The "Next Shift"
-        { name: 'Jan 01 (Day)', Triage: 30, Resus: 3, Obs: 10 },
+        { name: 'Dec 30 (Night)', Total: 60, Capacity: 50 }, // Over capacity
+        { name: 'Dec 31 (Day)', Total: 51, Capacity: 50 },
+        { name: 'Dec 31 (Night)', Total: 81, Capacity: 50 }, // The "Next Shift" (Critical)
+        { name: 'Jan 01 (Day)', Total: 43, Capacity: 50 },
       ];
       heat = [
-        { label: 'Dec 30 (Night)', risk: 'Medium' },
-        { label: 'Dec 31 (Day)', risk: 'Low' },
+        { label: 'Dec 30 (Night)', risk: 'High' },
+        { label: 'Dec 31 (Day)', risk: 'Medium' },
         { label: 'Dec 31 (Night)', risk: 'Critical' },
         { label: 'Jan 01 (Day)', risk: 'Low' },
       ];
@@ -43,10 +44,10 @@ const Trends = () => {
     // Shows Whole Day Counts (Day + Night combined)
     else if (timeframe === 'Next Day') {
       data = [
-        { name: 'Dec 29', Triage: 70, Resus: 8, Obs: 25 },
-        { name: 'Dec 30', Triage: 65, Resus: 6, Obs: 22 },
-        { name: 'Dec 31', Triage: 90, Resus: 12, Obs: 30 }, // High predicted load
-        { name: 'Jan 01', Triage: 60, Resus: 5, Obs: 20 },
+        { name: 'Dec 29', Total: 103, Capacity: 100 },
+        { name: 'Dec 30', Total: 93, Capacity: 100 },
+        { name: 'Dec 31', Total: 132, Capacity: 100 }, // High predicted load
+        { name: 'Jan 01', Total: 85, Capacity: 100 },
       ];
       heat = [
         { label: 'Dec 29', risk: 'Medium' },
@@ -60,10 +61,10 @@ const Trends = () => {
     // Shows Month-by-Month Counts
     else {
       data = [
-        { name: 'Jan', Triage: 2100, Resus: 150, Obs: 800 },
-        { name: 'Feb', Triage: 1800, Resus: 120, Obs: 750 },
-        { name: 'Mar', Triage: 2500, Resus: 250, Obs: 1100 }, // Seasonal Spike
-        { name: 'Apr', Triage: 1900, Resus: 140, Obs: 850 },
+        { name: 'Jan', Total: 3050, Capacity: 3000 },
+        { name: 'Feb', Total: 2670, Capacity: 2800 },
+        { name: 'Mar', Total: 3850, Capacity: 3100 }, // Seasonal Spike
+        { name: 'Apr', Total: 2890, Capacity: 3000 },
       ];
       heat = [
         { label: 'Jan', risk: 'Medium' },
@@ -118,7 +119,7 @@ const Trends = () => {
         <section className={styles.card}>
           <div className={styles.centerTitle}>
             <h3 style={{fontSize:16, fontWeight:600, color:'#334155', margin:0}}>
-               Zone Comparison Trend
+               Total Patient Volume Trend
             </h3>
             <span style={{fontSize:12, color:'#94a3b8'}}>
               {timeframe === 'Next Shift' ? '(Shift-by-Shift Breakdown)' : 
@@ -142,9 +143,27 @@ const Trends = () => {
                 <Tooltip contentStyle={{ borderRadius: 8, border: 'none', boxShadow: '0 6px 18px rgba(2,6,23,0.06)' }} />
                 <Legend verticalAlign="top" align="right" />
                 
-                <Line type="monotone" dataKey="Triage" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4 }} name="Triage (Waiting)" />
-                <Line type="monotone" dataKey="Resus" stroke="#ef4444" strokeWidth={3} dot={{ r: 4 }} name="Resus (Critical)" />
-                <Line type="monotone" dataKey="Obs" stroke="#0ea5e9" strokeWidth={3} dot={{ r: 4 }} name="Observation" />
+                {/* Single Line for Total Load */}
+                <Line 
+                  type="monotone" 
+                  dataKey="Total" 
+                  stroke="#2563eb" 
+                  strokeWidth={4} 
+                  dot={{ r: 5, strokeWidth: 2, fill: '#fff' }} 
+                  activeDot={{ r: 7 }}
+                  name="Total Patient Load" 
+                />
+                
+                {/* Reference Line for Capacity */}
+                <Line 
+                  type="monotone" 
+                  dataKey="Capacity" 
+                  stroke="#94a3b8" 
+                  strokeWidth={2} 
+                  strokeDasharray="5 5" 
+                  dot={false} 
+                  name="Safe Capacity Limit" 
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -183,7 +202,7 @@ const Trends = () => {
               {timeframe === 'Next Shift' 
                 ? ' High load expected for Night Shift. Approve overtime for 2 staff members.'
                 : timeframe === 'Next Day'
-                ? ' Critical load predicted for Dec 31. Ensure all zones are fully staffed.'
+                ? ' Critical load predicted for Dec 31. Activate overflow protocols.'
                 : ' March shows seasonal spike. Plan staff leave accordingly.'
               }
             </p>
