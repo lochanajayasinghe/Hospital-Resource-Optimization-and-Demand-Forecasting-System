@@ -1,64 +1,38 @@
 import React, { useState } from 'react';
-import { ClipboardList, Calendar, Clock, Save, RotateCcw } from 'lucide-react'; // Ensure lucide-react is installed
+import { ClipboardList, Calendar, Clock, Save, RotateCcw } from 'lucide-react';
 import Layout from './Layout';
 import styles from './DailyInput.module.css';
-
-// ETU Pilot Zones
-const ETU_ZONES = [
-  'Triage Zone',
-  'Resus (Critical)',
-  'Observation Beds',
-  'Isolation Area'
-];
 
 const DailyInput = () => {
   // State for Date & Shift
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [shift, setShift] = useState('Morning Shift (07:00 - 13:00)');
   
-  // State for Data Rows (Added 'deaths' column)
-  const [rows, setRows] = useState(() => 
-    ETU_ZONES.map(() => ({ 
-      admissions: 0, 
-      discharges: 0, 
-      transfersIn: 0, 
-      transfersOut: 0,
-      deaths: 0 
-    }))
-  );
+  // State for Data (Single ETU Row)
+  const [data, setData] = useState({
+    admissions: 0, 
+    discharges: 0, 
+    transfersOut: 0, 
+    deaths: 0 
+  });
 
-  // Helper to update a single cell
-  const updateCell = (index, field, value) => {
-    const next = [...rows];
+  // Helper to update fields
+  const updateField = (field, value) => {
     // Ensure non-negative numbers
     const numValue = Math.max(0, Number(value) || 0);
-    next[index] = { ...next[index], [field]: numValue };
-    setRows(next);
+    setData(prev => ({ ...prev, [field]: numValue }));
   };
 
-  // Auto-calculate Totals
-  const totals = rows.reduce((acc, r) => {
-    acc.admissions += r.admissions;
-    acc.discharges += r.discharges;
-    acc.transfersIn += r.transfersIn;
-    acc.transfersOut += r.transfersOut;
-    acc.deaths += r.deaths;
-    return acc;
-  }, { admissions: 0, discharges: 0, transfersIn: 0, transfersOut: 0, deaths: 0 });
-
   const handleClear = () => {
-    if(window.confirm("Are you sure you want to clear all data?")) {
-      setRows(ETU_ZONES.map(() => ({ 
-        admissions: 0, discharges: 0, transfersIn: 0, transfersOut: 0, deaths: 0 
-      })));
+    if(window.confirm("Are you sure you want to clear the form?")) {
+      setData({ admissions: 0, discharges: 0, transfersOut: 0, deaths: 0 });
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, this sends data to your backend
-    console.log('Submitting ETU Shift Data:', { date, shift, rows });
-    alert(`Data saved for ${shift} on ${date}.\nTotal Arrivals: ${totals.admissions}`);
+    console.log('Submitting ETU Shift Data:', { date, shift, data });
+    alert(`Data saved for ${shift} on ${date}.\nTotal Arrivals: ${data.admissions}`);
   };
 
   return (
@@ -69,7 +43,7 @@ const DailyInput = () => {
         <div className={styles.header}>
           <div>
             <h1 className={styles.title}>ETU Shift Data Entry</h1>
-            <p className={styles.subtitle}>Log patient volume per zone for AI training</p>
+            <p className={styles.subtitle}>Log total patient volume for the shift</p>
           </div>
           <div className={styles.badge}>
             <ClipboardList size={18} />
@@ -77,9 +51,9 @@ const DailyInput = () => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className={styles.formCard} aria-label="Daily census form">
+        <form onSubmit={handleSubmit} className={styles.formCard}>
           
-          {/* Controls Section (Date & Shift) */}
+          {/* Controls Section */}
           <div className={styles.controlsGrid}>
             <div className={styles.controlGroup}>
               <label className={styles.label} htmlFor="census-date">
@@ -104,78 +78,63 @@ const DailyInput = () => {
                 onChange={(e) => setShift(e.target.value)} 
                 className={styles.select}
               >
-                <option>Morning Shift (07:00 - 13:00)</option>
-                <option>Evening Shift (13:00 - 19:00)</option>
-                <option>Night Shift (19:00 - 07:00)</option>
+                <option>Day Shift </option>
+                <option>Night Shift </option>
               </select>
             </div>
           </div>
 
-          {/* Data Table */}
-          <div className={styles.tableWrap}>
-            <table>
-              <thead>
-                <tr>
-                  <th>Zone Name</th>
-                  <th>New Arrivals</th>
-                  <th>Discharges (Home)</th>
-                  <th>Transfers Out (Ward)</th>
-                  <th>Deaths</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ETU_ZONES.map((zone, i) => (
-                  <tr key={zone}>
-                    <td className={styles.wardName}>{zone}</td>
-                    <td>
-                      <input 
-                        type="number" 
-                        value={rows[i].admissions || ''} 
-                        onChange={(e) => updateCell(i, 'admissions', e.target.value)} 
-                        className={styles.numInput} 
-                        placeholder="0"
-                      />
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        value={rows[i].discharges || ''} 
-                        onChange={(e) => updateCell(i, 'discharges', e.target.value)} 
-                        className={styles.numInput} 
-                        placeholder="0"
-                      />
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        value={rows[i].transfersOut || ''} 
-                        onChange={(e) => updateCell(i, 'transfersOut', e.target.value)} 
-                        className={styles.numInput} 
-                        placeholder="0"
-                      />
-                    </td>
-                    <td>
-                      <input 
-                        type="number" 
-                        value={rows[i].deaths || ''} 
-                        onChange={(e) => updateCell(i, 'deaths', e.target.value)} 
-                        className={`${styles.numInput} ${styles.dangerInput}`} 
-                        placeholder="0"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className={styles.tfootRow}>
-                  <td>Shift Totals</td>
-                  <td>{totals.admissions}</td>
-                  <td>{totals.discharges}</td>
-                  <td>{totals.transfersOut}</td>
-                  <td>{totals.deaths}</td>
-                </tr>
-              </tfoot>
-            </table>
+          {/* Data Entry Grid (Simplified) */}
+          <div className={styles.gridInput}>
+            
+            <div className={styles.inputCard}>
+              <label>New Arrivals</label>
+              <input 
+                type="number" 
+                value={data.admissions || ''} 
+                onChange={(e) => updateField('admissions', e.target.value)} 
+                className={styles.bigInput} 
+                placeholder="0"
+              />
+              <span className={styles.helperText}>Patients checked in at Triage</span>
+            </div>
+
+            <div className={styles.inputCard}>
+              <label>Discharges (Home)</label>
+              <input 
+                type="number" 
+                value={data.discharges || ''} 
+                onChange={(e) => updateField('discharges', e.target.value)} 
+                className={styles.bigInput} 
+                placeholder="0"
+              />
+              <span className={styles.helperText}>Sent home from ETU</span>
+            </div>
+
+            <div className={styles.inputCard}>
+              <label>Transfers Out (Ward)</label>
+              <input 
+                type="number" 
+                value={data.transfersOut || ''} 
+                onChange={(e) => updateField('transfersOut', e.target.value)} 
+                className={styles.bigInput} 
+                placeholder="0"
+              />
+              <span className={styles.helperText}>Admitted to Hospital Wards</span>
+            </div>
+
+            <div className={styles.inputCard}>
+              <label className={styles.dangerLabel}>Deaths</label>
+              <input 
+                type="number" 
+                value={data.deaths || ''} 
+                onChange={(e) => updateField('deaths', e.target.value)} 
+                className={`${styles.bigInput} ${styles.dangerInput}`} 
+                placeholder="0"
+              />
+              <span className={styles.helperText}>Deceased in ETU</span>
+            </div>
+
           </div>
 
           {/* Action Buttons */}
