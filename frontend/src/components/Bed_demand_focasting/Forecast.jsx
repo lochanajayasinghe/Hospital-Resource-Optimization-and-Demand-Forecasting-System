@@ -17,7 +17,6 @@ import styles from './Forecast.module.css';
 const Forecast = () => {
   // --- STATE ---
   const [timeframe, setTimeframe] = useState('Next Shift');
-  const [selectedZone, setSelectedZone] = useState('Total ETU');
   const [model, setModel] = useState('TFT');
   const [chartData, setChartData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -27,28 +26,24 @@ const Forecast = () => {
     let generatedData = [];
     let generatedTable = [];
     
-    // 1. Determine Base Scale (Resus numbers are small, Total ETU is big)
-    const isResus = selectedZone.includes('Resus');
-    // Shift Average
-    const shiftAvg = isResus ? 3 : 45; 
-    // Daily Average (Shift * 2)
+    // BASELINE: Total ETU Volume (No more Zone splitting)
+    const shiftAvg = 45; // Average patients per shift for the whole unit
     const dailyAvg = shiftAvg * 2; 
-    // Monthly Average (Daily * 30)
     const monthlyAvg = dailyAvg * 30;
 
     // --- LOGIC 1: NEXT SHIFT (Shift-Wise View) ---
     if (timeframe === 'Next Shift') {
       generatedData = [
         { name: 'Dec 30 (Day)', historical: shiftAvg - 5, predicted: null, range: null },
-        { name: 'Dec 30 (Night)', historical: shiftAvg + 10, predicted: null, range: null },
+        { name: 'Dec 30 (Night)', historical: shiftAvg + 8, predicted: null, range: null },
         { name: 'Dec 31 (Day)', historical: shiftAvg - 2, predicted: null, range: null },
         // Connector
         { name: 'Dec 31 (Day)', historical: null, predicted: shiftAvg - 2, range: [shiftAvg-2, shiftAvg-2] },
         // The Prediction
-        { name: 'Dec 31 (Night)', historical: null, predicted: shiftAvg + 15, range: [shiftAvg + 10, shiftAvg + 20] },
+        { name: 'Dec 31 (Night)', historical: null, predicted: shiftAvg + 12, range: [shiftAvg + 5, shiftAvg + 20] },
       ];
       generatedTable = [
-        { label: 'Dec 31 (Night)', prediction: shiftAvg + 15, min: shiftAvg + 10, max: shiftAvg + 20 }
+        { label: 'Dec 31 (Night)', prediction: shiftAvg + 12, min: shiftAvg + 5, max: shiftAvg + 20 }
       ];
     } 
     
@@ -61,10 +56,10 @@ const Forecast = () => {
         // Connector
         { name: 'Dec 30', historical: null, predicted: dailyAvg - 5, range: [dailyAvg-5, dailyAvg-5] },
         // The Prediction (Tomorrow)
-        { name: 'Dec 31', historical: null, predicted: dailyAvg + 20, range: [dailyAvg + 10, dailyAvg + 30] },
+        { name: 'Dec 31', historical: null, predicted: dailyAvg + 25, range: [dailyAvg + 15, dailyAvg + 35] },
       ];
       generatedTable = [
-        { label: 'Dec 31 (Tomorrow)', prediction: dailyAvg + 20, min: dailyAvg + 10, max: dailyAvg + 30 }
+        { label: 'Dec 31 (Tomorrow)', prediction: dailyAvg + 25, min: dailyAvg + 15, max: dailyAvg + 35 }
       ];
     } 
     
@@ -77,16 +72,16 @@ const Forecast = () => {
         // Connector
         { name: 'Dec', historical: null, predicted: monthlyAvg - 20, range: [monthlyAvg-20, monthlyAvg-20] },
         // The Prediction (Next Month)
-        { name: 'Jan', historical: null, predicted: monthlyAvg + 150, range: [monthlyAvg + 100, monthlyAvg + 200] },
+        { name: 'Jan', historical: null, predicted: monthlyAvg + 180, range: [monthlyAvg + 100, monthlyAvg + 250] },
       ];
       generatedTable = [
-        { label: 'January 2026', prediction: monthlyAvg + 150, min: monthlyAvg + 100, max: monthlyAvg + 200 }
+        { label: 'January 2026', prediction: monthlyAvg + 180, min: monthlyAvg + 100, max: monthlyAvg + 250 }
       ];
     }
 
     setChartData(generatedData);
     setTableData(generatedTable);
-  }, [timeframe, selectedZone, model]);
+  }, [timeframe, model]);
 
   return (
     <Layout activePage="Forecasts">
@@ -95,24 +90,12 @@ const Forecast = () => {
         {/* --- HEADER --- */}
         <div className={styles.header}>
           <div>
-            <h1 className={styles.title}>Future Demand Forecast</h1>
-            <p className={styles.subtitle}>AI-Powered prediction for ETU Zones</p>
+            <h1 className={styles.title}>Total ETU Demand Forecast</h1>
+            <p className={styles.subtitle}>AI-Powered prediction for overall unit volume</p>
           </div>
 
           <div className={styles.controls}>
-            <div className={styles.controlGroup}>
-              <span className={styles.label}>Target Zone:</span>
-              <select 
-                className={styles.select}
-                value={selectedZone}
-                onChange={(e) => setSelectedZone(e.target.value)}
-              >
-                <option>Total ETU</option>
-                <option>Triage (Waiting)</option>
-                <option>Resus (Critical)</option>
-                <option>Observation</option>
-              </select>
-            </div>
+            {/* REMOVED TARGET ZONE SELECTOR */}
 
             <div className={styles.controlGroup}>
               <span className={styles.label}>Timeframe:</span>
@@ -145,7 +128,7 @@ const Forecast = () => {
         <section className={styles.card}>
           <div className={styles.cardHeader}>
             <div>
-              <h3 className={styles.cardTitle}>{selectedZone} Demand: {timeframe}</h3>
+              <h3 className={styles.cardTitle}>Total ETU Volume: {timeframe}</h3>
               <span className={styles.cardSub}>
                 {timeframe === 'Next Shift' ? 'Shift-by-Shift Analysis' : 
                  timeframe === 'Next Day' ? 'Daily Total Analysis' : 
@@ -218,8 +201,9 @@ const Forecast = () => {
           <div className={styles.analysisBox}>
             <Info className={styles.analysisIcon} size={20} />
             <p>
-              <strong>Analysis:</strong> Based on <strong>{model}</strong>, the 
-              <strong> {timeframe}</strong> prediction shows a total of <strong>{tableData[0]?.prediction}</strong> patients. 
+              <strong>Analysis:</strong> Based on the <strong>{model}</strong> model, the 
+              <strong> {timeframe}</strong> prediction indicates a total load of <strong>{tableData[0]?.prediction}</strong> patients. 
+              {timeframe === 'Next Shift' && ' Prepare for increased intake during the Night Shift.'}
               {timeframe === 'Next Month' && ' This indicates a seasonal increase.'}
             </p>
           </div>
