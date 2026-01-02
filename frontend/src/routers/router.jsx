@@ -19,6 +19,7 @@ import DailyInput from "../components/Bed_demand_focasting/DailyInput";
 import Trends from "../components/Bed_demand_focasting/Trends";
 import Inventory from "../components/Bed_demand_focasting/Inventory";
 import AddBed from "../components/Bed_demand_focasting/AddBed";
+import WardNurseDashboard from "../components/Bed_demand_focasting/WardNurseDashboard";
 
 import DashboardLayout from "../dashboard/DashboardLayout";
 import Dashboard from "../dashboard/Dashboard";
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
       { path: "/Trends", element: <Trends /> },
       { path: "/Inventory", element: <Inventory /> },
       { path: "/AddBed", element: <AddBed /> },
+      { path: "/WardNurseDashboard", element: <WardNurseDashboard /> },
     ],
   },
   {
