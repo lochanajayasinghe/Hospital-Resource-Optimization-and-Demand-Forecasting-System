@@ -87,7 +87,7 @@ const BedDashboard = () => {
                 AI Forecast • {prediction.time}
               </div>
               <div style={{ fontSize: 20, fontWeight: 700, color: isCritical ? '#7f1d1d' : '#1e3a8a', marginTop: 2 }}>
-                Expect {prediction.count} Patients (+35%)
+                Expect {prediction.count} Patients 
               </div>
               <div style={{ fontSize: 14, color: isCritical ? '#b91c1c' : '#3b82f6', marginTop: 2 }}>
                 Primary Driver: <strong>{prediction.driver}</strong>
@@ -120,7 +120,7 @@ const BedDashboard = () => {
         </div>
 
         {/* --- KPI CARDS --- */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 18, marginBottom: 28 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 28, marginBottom: 28, flexWrap: 'wrap' }}>
           <StatCard 
             icon={<BedDouble size={24} color="#2563eb" />} 
             title="Total Capacity" 
@@ -139,12 +139,7 @@ const BedDashboard = () => {
             value="Critical" 
             sub="Predicted: 29 Arrivals"
           />
-          <StatCard 
-            icon={<Clock size={24} color="#ea580c" />} 
-            title="Bottlenecks" 
-            value="4" 
-            sub="Pending Ward Transfer"
-          />
+          
         </div>
 
         {/* --- LIVE UNIT SATURATION GAUGE --- */}
@@ -204,7 +199,7 @@ const BedDashboard = () => {
 
 // --- Helper Component ---
 const StatCard = ({ icon, title, value, sub }) => (
-  <div style={{ background: '#fff', padding: 20, borderRadius: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.02)', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+  <div style={{ background: '#fff', padding: 20, borderRadius: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.02)', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'flex-start', gap: 16, minWidth: 260, flex: '0 0 auto' }}>
     <div style={{ minWidth: 48, height: 48, borderRadius: 10, background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {icon}
     </div>
