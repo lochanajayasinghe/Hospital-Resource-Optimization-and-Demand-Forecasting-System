@@ -14,13 +14,15 @@ import Layout from './Layout';
 const BedDashboard = () => {
 
   // --- MOCK REAL-TIME DATA ---
-  const totalOccupancy = 90; 
-  const occupancyColor = '#ef4444'; // Red for Critical
-  const occupancyStatus = 'CRITICAL';
+  const totalCapacity = 50; // total beds in unit
+  const occupiedBeds = 40; // current occupied beds
+  const totalOccupancy = Math.round((occupiedBeds / totalCapacity) * 100); // occupancy %
+  const occupancyColor = totalOccupancy > 85 ? '#ef4444' : totalOccupancy > 60 ? '#f59e0b' : '#10b981';
+  const occupancyStatus = totalOccupancy > 85 ? 'CRITICAL' : totalOccupancy > 60 ? 'BUSY' : 'NORMAL';
 
   // --- MOCK PREDICTION DATA (The "Why") ---
   const prediction = {
-    count: 29,
+    count: 20,
     driver: 'Heavy Rainfall Alert',
     risk: 'High',
     time: 'Night Shift'
@@ -124,20 +126,20 @@ const BedDashboard = () => {
           <StatCard 
             icon={<BedDouble size={24} color="#2563eb" />} 
             title="Total Capacity" 
-            value="20 Beds" 
+            value={`${totalCapacity} Beds`} 
             sub="Fixed Unit Size"
           />
           <StatCard 
             icon={<Users size={24} color={occupancyColor} />} 
             title="Current Occupancy" 
-            value={`${totalOccupancy}%`} 
-            sub="18 / 20 Beds Full"
+            value={`${occupiedBeds} / ${totalCapacity} Beds Full`} 
+            sub={`${totalOccupancy}%`}
           />
           <StatCard 
             icon={<Activity size={24} color={occupancyColor} />} 
             title="Next Shift Load" 
-            value="Critical" 
-            sub="Predicted: 29 Arrivals"
+            value={`Predicted: ${prediction.count} Arrivals`} 
+            sub={occupancyStatus}
           />
           
         </div>
