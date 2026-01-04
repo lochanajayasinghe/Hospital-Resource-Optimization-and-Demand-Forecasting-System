@@ -22,7 +22,7 @@ const BedDashboard = () => {
 
   // --- MOCK PREDICTION DATA (The "Why") ---
   const prediction = {
-    count: 20,
+    count: 29,
     driver: 'Heavy Rainfall Alert',
     risk: 'High',
     time: 'Night Shift'
@@ -142,7 +142,7 @@ const BedDashboard = () => {
             sub={occupancyStatus}
           />
           
-        </div>
+        </div>Expect 29 Patients
 
         {/* --- LIVE UNIT SATURATION GAUGE --- */}
         <div style={{ background: '#fff', padding: 32, borderRadius: 16, boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', border: '1px solid #e2e8f0' }}>
